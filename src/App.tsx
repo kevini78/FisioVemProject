@@ -7,9 +7,12 @@ import { OnboardingScreen } from "@/pages/OnboardingScreen";
 import { LoginScreen } from "@/pages/LoginScreen";
 import { RegisterScreen } from "@/pages/RegisterScreen";
 import { SimpleHomeScreen } from "@/pages/SimpleHomeScreen";
+import { MobileSearchScreen } from "@/pages/MobileSearchScreen";
+import { MobileConsultationsScreen } from "@/pages/MobileConsultationsScreen";
+import { MobileProfileScreen } from "@/pages/MobileProfileScreen";
 import NotFound from "./pages/NotFound";
 
-type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home';
+type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'profile';
 
 const AppContent = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
@@ -24,6 +27,10 @@ const AppContent = () => {
     // Check if user is authenticated
     const savedUser = localStorage.getItem('fisiovem_user');
     setIsAuthenticated(!!savedUser);
+    
+    // Debug: Force onboarding for testing (remove in production)
+    console.log('Onboarding completed:', !!onboardingCompleted);
+    console.log('User authenticated:', !!savedUser);
   }, []);
 
   useEffect(() => {
@@ -91,6 +98,15 @@ const AppContent = () => {
           onPhysiotherapistSelect={handlePhysiotherapistSelect}
         />
       );
+    
+    case 'search':
+      return <MobileSearchScreen onNavigate={handleNavigate} />;
+    
+    case 'appointments':
+      return <MobileConsultationsScreen onNavigate={handleNavigate} />;
+    
+    case 'profile':
+      return <MobileProfileScreen onNavigate={handleNavigate} />;
     
     default:
       return <NotFound />;
