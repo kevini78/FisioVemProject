@@ -27,6 +27,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+  console.log("AuthProvider inicializado");
   const [user, setUser] = useState<User | null>(null);
   const [userType, setUserType] = useState<UserType | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);

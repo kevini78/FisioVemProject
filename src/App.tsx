@@ -22,10 +22,14 @@ const queryClient = new QueryClient();
 type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'reviews' | 'profile' | 'physio-profile' | 'appointment';
 
 const AppContent = () => {
+  console.log("AppContent renderizado");
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
+  
+  console.log("Tentando usar useAuth...");
   const { isAuthenticated } = useAuth();
+  console.log("isAuthenticated:", isAuthenticated);
 
   useEffect(() => {
     // Check if user has seen onboarding
@@ -75,6 +79,8 @@ const AppContent = () => {
     setCurrentScreen('appointment');
   };
 
+  console.log("Renderizando tela:", currentScreen);
+  
   // Render current screen
   switch (currentScreen) {
     case 'splash':
@@ -132,16 +138,19 @@ const AppContent = () => {
   }
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <AppContent />
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  console.log("App component carregado");
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <Toaster />
+          <Sonner />
+          <AppContent />
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
