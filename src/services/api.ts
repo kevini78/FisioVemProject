@@ -22,8 +22,10 @@ export interface Consultation {
   specialty: string;
   status: 'agendada' | 'confirmada' | 'concluida' | 'cancelada';
   address?: string;
-  price: number;
+  city?: string;
+  state?: string;
   notes?: string;
+  price: number;
   createdAt: string;
 }
 

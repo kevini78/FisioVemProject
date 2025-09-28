@@ -248,28 +248,34 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
 
         {/* Content */}
         <div className="mobile-scroll flex-1 px-4 py-4 space-y-4 pb-24">
-          {activeTab === 'proximas' && (
-            <div className="space-y-4">
-              {consultations.proximas.length > 0 ? (
-                consultations.proximas.map(consultation => (
-                  <ConsultationCard key={consultation.id} consultation={consultation} />
-                ))
-              ) : (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">📅</div>
-                  <h3 className="text-lg font-medium text-gray-800 mb-2">Nenhuma consulta agendada</h3>
-                  <p className="text-gray-600 mb-4">Que tal agendar uma sessão?</p>
-                  <button className="mobile-btn bg-blue-600 text-white px-6">
-                    + Agendar Consulta
-                  </button>
-                </div>
+          {isLoading ? (
+            <div className="text-center py-12">
+              <div className="text-5xl mb-3 animate-spin">⏳</div>
+              <p className="text-gray-600">Carregando consultas...</p>
+            </div>
+          ) : filteredConsultations.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-6xl mb-4">📅</div>
+              <h3 className="text-lg font-medium text-gray-800 mb-2">
+                Nenhuma consulta {activeTab === 'proximas' ? 'agendada' : 'encontrada'}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {activeTab === 'proximas'
+                  ? 'Que tal agendar uma sessão com um especialista?'
+                  : 'Suas consultas concluídas aparecerão aqui.'}
+              </p>
+              {activeTab === 'proximas' && (
+                <button
+                  onClick={() => onNavigate('search')}
+                  className="mobile-btn bg-blue-600 text-white px-6"
+                >
+                  + Agendar Consulta
+                </button>
               )}
             </div>
-          )}
-
-          {activeTab === 'concluidas' && (
+          ) : (
             <div className="space-y-4">
-              {consultations.concluidas.map(consultation => (
+              {filteredConsultations.map(consultation => (
                 <ConsultationCard key={consultation.id} consultation={consultation} />
               ))}
             </div>

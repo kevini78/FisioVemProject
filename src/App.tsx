@@ -23,22 +23,13 @@ const AppContent = () => {
   const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
 
   useEffect(() => {
-    // Force clean start for development - remove in production
-    localStorage.clear(); // Uncomment this line to always show onboarding
-    
-    // Check if user has seen onboarding
     const onboardingCompleted = localStorage.getItem('fisiovem_onboarding_completed');
     setHasSeenOnboarding(!!onboardingCompleted);
-    
-    // Check if user is authenticated
-    const savedUser = localStorage.getItem('fisiovem_user');
-    setIsAuthenticated(!!savedUser);
-    
-    console.log('App State:', {
-      onboardingCompleted: !!onboardingCompleted,
-      userAuthenticated: !!savedUser,
-      currentScreen
-    });
+
+    const currentUser = apiService.getCurrentUser();
+    if (currentUser) {
+      setIsAuthenticated(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -62,12 +53,12 @@ const AppContent = () => {
   };
 
   const handleLoginSuccess = () => {
-    // Simular autenticação
-    localStorage.setItem('fisiovem_user', JSON.stringify({
-      id: 'user_1',
-      name: 'Usuário Teste',
-      email: 'teste@email.com'
-    }));
+    const currentUser = apiService.getCurrentUser();
+    if (!currentUser) {
+      console.warn('Nenhum usuário encontrado após login/registro.');
+      return;
+    }
+
     setIsAuthenticated(true);
     setCurrentScreen('home');
   };

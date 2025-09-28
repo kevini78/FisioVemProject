@@ -11,7 +11,11 @@ export const BookingScreen = ({ physiotherapist, onBack, onSuccess }: BookingScr
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [consultationType, setConsultationType] = useState<'presencial' | 'online'>('presencial');
-  const [address, setAddress] = useState('');
+  const [addressStreet, setAddressStreet] = useState('');
+  const [addressNumber, setAddressNumber] = useState('');
+  const [addressNeighborhood, setAddressNeighborhood] = useState('');
+  const [addressCity, setAddressCity] = useState('');
+  const [addressState, setAddressState] = useState('');
   const [notes, setNotes] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -43,9 +47,11 @@ export const BookingScreen = ({ physiotherapist, onBack, onSuccess }: BookingScr
       return;
     }
 
-    if (consultationType === 'presencial' && !address) {
-      alert('Por favor, informe o endereço para atendimento domiciliar');
-      return;
+    if (consultationType === 'presencial') {
+      if (!addressStreet || !addressNumber || !addressNeighborhood || !addressCity || !addressState) {
+        alert('Por favor, preencha todos os campos de endereço');
+        return;
+      }
     }
 
     setIsLoading(true);
@@ -65,7 +71,9 @@ export const BookingScreen = ({ physiotherapist, onBack, onSuccess }: BookingScr
         time: selectedTime,
         type: consultationType,
         specialty: physiotherapist.specialty,
-        address: consultationType === 'presencial' ? address : undefined,
+        address: consultationType === 'presencial' ? `${addressStreet}, ${addressNumber} - ${addressNeighborhood}` : undefined,
+        city: consultationType === 'presencial' ? addressCity : undefined,
+        state: consultationType === 'presencial' ? addressState : undefined,
         price: physiotherapist.price,
         notes
       });
@@ -192,14 +200,65 @@ export const BookingScreen = ({ physiotherapist, onBack, onSuccess }: BookingScr
 
           {/* Address (only for presencial) */}
           {consultationType === 'presencial' && (
-            <div className="bg-white rounded-xl p-4 shadow-sm">
-              <h3 className="font-semibold text-gray-800 mb-3">Endereço para Atendimento</h3>
-              <textarea
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Digite o endereço completo onde será realizada a consulta..."
-                className="mobile-input w-full h-20 resize-none"
-              />
+            <div className="bg-white rounded-xl p-4 shadow-sm space-y-4">
+              <h3 className="font-semibold text-gray-800">Endereço para Atendimento</h3>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="col-span-2">
+                  <label className="text-sm font-medium text-gray-700">Rua</label>
+                  <input
+                    type="text"
+                    value={addressStreet}
+                    onChange={(e) => setAddressStreet(e.target.value)}
+                    placeholder="Nome da rua"
+                    className="mobile-input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Número</label>
+                  <input
+                    type="text"
+                    value={addressNumber}
+                    onChange={(e) => setAddressNumber(e.target.value)}
+                    placeholder="Nº"
+                    className="mobile-input w-full"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Bairro</label>
+                  <input
+                    type="text"
+                    value={addressNeighborhood}
+                    onChange={(e) => setAddressNeighborhood(e.target.value)}
+                    placeholder="Bairro"
+                    className="mobile-input w-full"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Cidade</label>
+                  <input
+                    type="text"
+                    value={addressCity}
+                    onChange={(e) => setAddressCity(e.target.value)}
+                    placeholder="Cidade"
+                    className="mobile-input w-full"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-sm font-medium text-gray-700">Estado</label>
+                  <input
+                    type="text"
+                    value={addressState}
+                    onChange={(e) => setAddressState(e.target.value.toUpperCase())}
+                    placeholder="UF"
+                    maxLength={2}
+                    className="mobile-input w-full uppercase"
+                  />
+                </div>
+              </div>
             </div>
           )}
 

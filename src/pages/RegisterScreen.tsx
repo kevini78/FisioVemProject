@@ -4,9 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useAuth } from '@/context/AuthContext';
-import { UserType } from '@/types';
-import { useToast } from '@/hooks/use-toast';
+import { apiService } from '@/services/api';
+import type { UserType } from '@/services/api';
 
 interface RegisterScreenProps {
   onSuccess: () => void;
@@ -29,66 +28,39 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
   const [userType, setUserType] = useState<UserType>('patient');
   const [isLoading, setIsLoading] = useState(false);
   
-  const { register } = useAuth();
-  const { toast } = useToast();
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "As senhas não coincidem.",
-      });
+      alert('As senhas não coincidem.');
       return;
     }
 
     if (formData.password.length < 6) {
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "A senha deve ter pelo menos 6 caracteres.",
-      });
+      alert('A senha deve ter pelo menos 6 caracteres.');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const userData = {
+      const result = await apiService.register({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         address: formData.address,
-        userType,
-        ...(userType === 'physiotherapist' && {
-          specialties: formData.specialties.split(',').map(s => s.trim()),
-          bio: formData.bio,
-          pricePerSession: 100,
-          rating: 0,
-          totalReviews: 0,
-          experience: 1,
-          credentials: ['CREFITO'],
-          availability: [],
-          isVerified: false
-        })
-      };
+        password: formData.password,
+        userType
+      });
 
-      const success = await register(userData, userType);
-      if (success) {
-        toast({
-          title: "Cadastro realizado com sucesso!",
-          description: "Bem-vindo ao FisioVem.",
-        });
+      if (result.success) {
+        alert('Cadastro realizado com sucesso!');
         onSuccess();
+      } else {
+        alert(result.error || 'Erro ao criar conta.');
       }
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Ocorreu um erro ao criar sua conta. Tente novamente.",
-      });
+      alert('Ocorreu um erro ao criar sua conta. Tente novamente.');
     } finally {
       setIsLoading(false);
     }
@@ -99,7 +71,8 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex flex-col">
+    <div className="mobile-container">
+      <div className="mobile-safe-area min-h-screen bg-gradient-hero flex flex-col">
       {/* Header */}
       <div className="flex items-center text-white p-4">
         <Button
@@ -124,8 +97,8 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
       </div>
 
       {/* Register Form */}
-      <div className="flex-1 bg-background rounded-t-3xl px-6 pt-8">
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="flex-1 bg-background rounded-t-3xl px-6 pt-8 mobile-scroll">
+        <form onSubmit={handleSubmit} className="space-y-4 pb-12">
           {/* User Type Selection */}
           <div className="grid grid-cols-2 gap-3 mb-6">
             <Button
@@ -167,7 +140,10 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
                 id="phone"
                 placeholder="(11) 99999-9999"
                 value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
+                onChange={(e) => {
+                  const digitsOnly = e.target.value.replace(/\D/g, '').slice(0, 11);
+                  handleInputChange('phone', digitsOnly);
+                }}
                 required
                 className="h-11"
               />
@@ -301,6 +277,7 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
             </button>
           </p>
         </div>
+      </div>
       </div>
     </div>
   );
