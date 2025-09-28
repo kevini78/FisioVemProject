@@ -10,16 +10,22 @@ import { SimpleHomeScreen } from "@/pages/SimpleHomeScreen";
 import { MobileSearchScreen } from "@/pages/MobileSearchScreen";
 import { MobileConsultationsScreen } from "@/pages/MobileConsultationsScreen";
 import { MobileProfileScreen } from "@/pages/MobileProfileScreen";
+import { BookingScreen } from "@/pages/BookingScreen";
+import { apiService } from "@/services/api";
 import NotFound from "./pages/NotFound";
 
-type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'profile';
+type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'profile' | 'booking';
 
 const AppContent = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
 
   useEffect(() => {
+    // Force clean start for development - remove in production
+    localStorage.clear(); // Uncomment this line to always show onboarding
+    
     // Check if user has seen onboarding
     const onboardingCompleted = localStorage.getItem('fisiovem_onboarding_completed');
     setHasSeenOnboarding(!!onboardingCompleted);
@@ -28,9 +34,11 @@ const AppContent = () => {
     const savedUser = localStorage.getItem('fisiovem_user');
     setIsAuthenticated(!!savedUser);
     
-    // Debug: Force onboarding for testing (remove in production)
-    console.log('Onboarding completed:', !!onboardingCompleted);
-    console.log('User authenticated:', !!savedUser);
+    console.log('App State:', {
+      onboardingCompleted: !!onboardingCompleted,
+      userAuthenticated: !!savedUser,
+      currentScreen
+    });
   }, []);
 
   useEffect(() => {
@@ -73,8 +81,8 @@ const AppContent = () => {
   };
 
   const handlePhysiotherapistSelect = (id: string) => {
-    // Funcionalidade em desenvolvimento
-    alert('Seleção de fisioterapeuta em desenvolvimento!');
+    setSelectedPhysiotherapistId(id);
+    setCurrentScreen('booking');
   };
 
   // Render current screen
@@ -107,6 +115,19 @@ const AppContent = () => {
     
     case 'profile':
       return <MobileProfileScreen onNavigate={handleNavigate} />;
+    
+    case 'booking':
+      const physiotherapist = apiService.getPhysiotherapistById(selectedPhysiotherapistId);
+      if (!physiotherapist) {
+        return <div>Fisioterapeuta não encontrado</div>;
+      }
+      return (
+        <BookingScreen 
+          physiotherapist={physiotherapist}
+          onBack={() => setCurrentScreen('home')}
+          onSuccess={() => setCurrentScreen('appointments')}
+        />
+      );
     
     default:
       return <NotFound />;

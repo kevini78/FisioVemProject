@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Activity, User, Stethoscope } from 'lucide-react';
+import { apiService } from '@/services/api';
 
 interface LoginScreenProps {
   onSuccess: () => void;
@@ -17,17 +18,19 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simular delay de login
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      const result = await apiService.login(email, password);
       
-      // Verificar credenciais demo ou qualquer email/senha para teste
-      if (email && password) {
+      if (result.success) {
         onSuccess();
       } else {
-        alert('Por favor, preencha email e senha.');
+        alert(result.error || 'Erro ao fazer login');
       }
-    }, 1000);
+    } catch (error) {
+      alert('Erro inesperado ao fazer login');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Demo credentials helper

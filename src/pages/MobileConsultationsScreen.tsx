@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { apiService, Consultation } from '@/services/api';
 
 interface MobileConsultationsScreenProps {
   onNavigate: (page: string) => void;
@@ -6,53 +7,63 @@ interface MobileConsultationsScreenProps {
 
 export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScreenProps) => {
   const [activeTab, setActiveTab] = useState('proximas');
+  const [consultations, setConsultations] = useState<Consultation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const consultations = {
-    proximas: [
-      {
-        id: '1',
-        physiotherapistName: 'Dr. Carlos Silva',
-        date: '2024-10-02',
-        time: '14:00',
-        type: 'presencial',
-        specialty: 'Ortopedia',
-        status: 'confirmada',
-        address: 'Rua das Flores, 123 - Vila Madalena'
-      },
-      {
-        id: '2',
-        physiotherapistName: 'Dra. Ana Costa',
-        date: '2024-10-05',
-        time: '10:00',
-        type: 'online',
-        specialty: 'Neurologia',
-        status: 'pendente'
-      }
-    ],
-    concluidas: [
-      {
-        id: '3',
-        physiotherapistName: 'Dr. Pedro Oliveira',
-        date: '2024-09-28',
-        time: '16:30',
-        type: 'presencial',
-        specialty: 'Esportiva',
-        status: 'concluida',
-        rating: 5,
-        address: 'Av. Paulista, 1000 - Bela Vista'
-      },
-      {
-        id: '4',
-        physiotherapistName: 'Dra. Ana Costa',
-        date: '2024-09-20',
-        time: '09:00',
-        type: 'online',
-        specialty: 'Neurologia',
-        status: 'concluida',
-        rating: 4
-      }
-    ]
+  useEffect(() => {
+    loadConsultations();
+  }, []);
+
+  const loadConsultations = () => {
+    const currentUser = apiService.getCurrentUser();
+    if (currentUser) {
+      const userConsultations = apiService.getConsultations(currentUser.id);
+      setConsultations(userConsultations);
+    }
+    setIsLoading(false);
   };
+
+  const handleCancelConsultation = async (consultationId: string) => {
+    if (!confirm('Tem certeza que deseja cancelar esta consulta?')) {
+      return;
+    }
+
+    const result = await apiService.cancelConsultation(consultationId);
+    if (result.success) {
+      alert('Consulta cancelada com sucesso!');
+      loadConsultations();
+    } else {
+      alert(result.error || 'Erro ao cancelar consulta');
+    }
+  };
+
+  const handleConfirmConsultation = async (consultationId: string) => {
+    const result = await apiService.updateConsultationStatus(consultationId, 'confirmada');
+    if (result.success) {
+      alert('Consulta confirmada!');
+      loadConsultations();
+    } else {
+      alert(result.error || 'Erro ao confirmar consulta');
+    }
+  };
+
+  const getFilteredConsultations = () => {
+    const now = new Date();
+    
+    if (activeTab === 'proximas') {
+      return consultations.filter(c => 
+        c.status === 'agendada' || c.status === 'confirmada' || 
+        (new Date(c.date) >= now && c.status !== 'cancelada' && c.status !== 'concluida')
+      );
+    } else {
+      return consultations.filter(c => 
+        c.status === 'concluida' || c.status === 'cancelada' ||
+        (new Date(c.date) < now && c.status !== 'agendada' && c.status !== 'confirmada')
+      );
+    }
+  };
+
+  const filteredConsultations = getFilteredConsultations();
 
   const getStatusColor = (status: string) => {
     switch (status) {

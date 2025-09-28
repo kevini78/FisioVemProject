@@ -1,3 +1,5 @@
+import { apiService } from '@/services/api';
+
 interface SimpleHomeScreenProps {
   onNavigate: (page: string) => void;
   onPhysiotherapistSelect: (id: string) => void;
@@ -97,13 +99,10 @@ export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: Simple
         <div className="bg-white rounded-xl p-4 shadow-lg">
           <h3 className="font-semibold text-gray-800 mb-4">Fisioterapeutas em Destaque</h3>
           <div className="space-y-3">
-            {[
-              { name: 'Dr. Carlos Silva', specialty: 'Ortopedia', rating: '4.9', experience: '8 anos' },
-              { name: 'Dra. Ana Costa', specialty: 'Neurologia', rating: '4.8', experience: '12 anos' }
-            ].map((physio) => (
+            {apiService.getPhysiotherapists().slice(0, 3).map((physio) => (
               <div
-                key={physio.name}
-                onClick={() => onPhysiotherapistSelect('demo')}
+                key={physio.id}
+                onClick={() => onPhysiotherapistSelect(physio.id)}
                 className="flex items-center p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors cursor-pointer"
               >
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-green-400 rounded-full flex items-center justify-center text-white font-semibold mr-3">
@@ -112,9 +111,12 @@ export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: Simple
                 <div className="flex-1">
                   <h4 className="font-medium text-gray-800">{physio.name}</h4>
                   <p className="text-sm text-gray-600">{physio.specialty} • {physio.experience}</p>
-                  <div className="flex items-center mt-1">
-                    <span className="text-yellow-400 text-sm">⭐</span>
-                    <span className="text-sm text-gray-600 ml-1">{physio.rating}</span>
+                  <div className="flex items-center justify-between mt-1">
+                    <div className="flex items-center">
+                      <span className="text-yellow-400 text-sm">⭐</span>
+                      <span className="text-sm text-gray-600 ml-1">{physio.rating}</span>
+                    </div>
+                    <span className="text-sm font-medium text-green-600">R$ {physio.price}</span>
                   </div>
                 </div>
                 <div className="text-gray-400">›</div>
