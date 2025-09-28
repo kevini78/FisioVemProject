@@ -176,65 +176,6 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
                   </div>
                 }
               />
-              <MenuOption
-                icon="💳"
-                title="Pagamentos"
-                subtitle="Métodos de pagamento e histórico"
-                onClick={() => alert('Pagamentos em desenvolvimento')}
-              />
-              <MenuOption
-                icon="📋"
-                title="Histórico Médico"
-                subtitle="Suas informações de saúde"
-                onClick={() => alert('Histórico médico em desenvolvimento')}
-              />
-            </div>
-          </div>
-
-          {/* Support Options */}
-          <div className="bg-white rounded-xl shadow-sm">
-            <div className="p-4 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-800">Suporte</h3>
-            </div>
-            
-            <div className="divide-y divide-gray-100">
-              <MenuOption
-                icon="❓"
-                title="Central de Ajuda"
-                subtitle="FAQ e tutoriais"
-                onClick={() => alert('Central de ajuda em desenvolvimento')}
-              />
-              <MenuOption
-                icon="💬"
-                title="Fale Conosco"
-                subtitle="Entre em contato com nosso suporte"
-                onClick={() => alert('Suporte em desenvolvimento')}
-              />
-              <MenuOption
-                icon="⭐"
-                title="Avaliar App"
-                subtitle="Nos ajude a melhorar"
-                onClick={() => alert('Avaliação em desenvolvimento')}
-              />
-            </div>
-          </div>
-
-          {/* Specialties */}
-          <div className="bg-white rounded-xl shadow-sm">
-            <div className="p-4 border-b border-gray-100">
-              <h3 className="font-semibold text-gray-800">Especialidades de Interesse</h3>
-            </div>
-            <div className="p-4">
-              <div className="flex flex-wrap gap-2">
-                {['Ortopedia', 'Neurologia'].map((specialty) => (
-                  <span key={specialty} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                    {specialty}
-                  </span>
-                ))}
-                <button className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm hover:bg-gray-200 transition-colors">
-                  + Adicionar
-                </button>
-              </div>
             </div>
           </div>
 

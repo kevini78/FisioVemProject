@@ -29,7 +29,8 @@ export const RescheduleModal = ({ isOpen, consultation, onClose, onConfirm }: Re
 
   const getNextDays = (count: number) => {
     const days = [];
-    for (let i = 0; i <= count; i++) {
+    // Começar a partir do próximo dia (i = 1) para garantir pelo menos 1 dia de antecedência
+    for (let i = 1; i <= count; i++) {
       const date = new Date();
       date.setDate(date.getDate() + i);
       days.push({

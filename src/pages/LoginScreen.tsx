@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Activity, User, Stethoscope } from 'lucide-react';
+import { Eye, EyeOff, Activity } from 'lucide-react';
 import { apiService } from '@/services/api';
 
 interface LoginScreenProps {
@@ -11,7 +11,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [userType, setUserType] = useState<'patient' | 'physiotherapist'>('patient');
+  const [userType] = useState<'patient' | 'physiotherapist'>('patient'); // Sempre paciente
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -59,34 +59,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
 
         {/* Login Form */}
         <div className="flex-1 bg-white rounded-t-3xl px-4 pt-8 mobile-scroll">
-        <form onSubmit={handleLogin} className="space-y-6">
-          {/* User Type Selection */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <button
-              type="button"
-              onClick={() => setUserType('patient')}
-              className={`flex flex-col items-center py-4 px-3 rounded-lg border-2 transition-colors ${
-                userType === 'patient' 
-                  ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              <User className="w-5 h-5 mb-2" />
-              <span className="text-sm font-medium">Paciente</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setUserType('physiotherapist')}
-              className={`flex flex-col items-center py-4 px-3 rounded-lg border-2 transition-colors ${
-                userType === 'physiotherapist' 
-                  ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
-              }`}
-            >
-              <Stethoscope className="w-5 h-5 mb-2" />
-              <span className="text-sm font-medium">Fisioterapeuta</span>
-            </button>
-          </div>
+               <form onSubmit={handleLogin} className="space-y-6">
 
           {/* Email */}
           <div className="space-y-2">

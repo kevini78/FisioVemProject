@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, EyeOff, Activity, User, Stethoscope, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Activity, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +26,7 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [userType, setUserType] = useState<UserType>('patient');
+  const [userType] = useState<UserType>('patient'); // Sempre paciente
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<{message: string; type: 'success' | 'error' | 'info'} | null>(null);
   
@@ -130,28 +130,7 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
 
       {/* Register Form */}
       <div className="flex-1 bg-background rounded-t-3xl px-6 pt-8 mobile-scroll">
-        <form onSubmit={handleSubmit} className="space-y-4 pb-12">
-          {/* User Type Selection */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <Button
-              type="button"
-              variant={userType === 'patient' ? 'default' : 'outline'}
-              onClick={() => setUserType('patient')}
-              className="flex flex-col h-auto py-4 gap-2"
-            >
-              <User className="w-5 h-5" />
-              <span className="text-sm">Paciente</span>
-            </Button>
-            <Button
-              type="button"
-              variant={userType === 'physiotherapist' ? 'default' : 'outline'}
-              onClick={() => setUserType('physiotherapist')}
-              className="flex flex-col h-auto py-4 gap-2"
-            >
-              <Stethoscope className="w-5 h-5" />
-              <span className="text-sm">Fisioterapeuta</span>
-            </Button>
-          </div>
+                 <form onSubmit={handleSubmit} className="space-y-4 pb-12">
 
           {/* Basic Info */}
           <div className="grid grid-cols-2 gap-3">
@@ -207,33 +186,6 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
             />
           </div>
 
-          {/* Physiotherapist specific fields */}
-          {userType === 'physiotherapist' && (
-            <>
-              <div className="space-y-2">
-                <Label htmlFor="specialties">Especialidades</Label>
-                <Input
-                  id="specialties"
-                  placeholder="Ortopedia, Neurologia, Geriatria..."
-                  value={formData.specialties}
-                  onChange={(e) => handleInputChange('specialties', e.target.value)}
-                  required
-                  className="h-11"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="bio">Sobre você</Label>
-                <Textarea
-                  id="bio"
-                  placeholder="Conte um pouco sobre sua experiência..."
-                  value={formData.bio}
-                  onChange={(e) => handleInputChange('bio', e.target.value)}
-                  className="min-h-20"
-                />
-              </div>
-            </>
-          )}
 
           {/* Password */}
           <div className="grid grid-cols-2 gap-3">
