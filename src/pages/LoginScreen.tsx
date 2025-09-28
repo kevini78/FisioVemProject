@@ -53,7 +53,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
               <Activity className="w-10 h-10 text-white" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Bem-vindo de volta</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Bem-vindo ao FisioVem</h1>
           <p className="text-white/80 text-lg">Faça login para continuar</p>
         </div>
 
