@@ -6,7 +6,7 @@ import { SplashScreen } from "@/pages/SplashScreen";
 import { OnboardingScreen } from "@/pages/OnboardingScreen";
 import { LoginScreen } from "@/pages/LoginScreen";
 import { RegisterScreen } from "@/pages/RegisterScreen";
-import { HomeScreen } from "@/pages/HomeScreen";
+import { SimpleHomeScreen } from "@/pages/SimpleHomeScreen";
 import NotFound from "./pages/NotFound";
 
 type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home';
@@ -86,7 +86,7 @@ const AppContent = () => {
     
     case 'home':
       return (
-        <HomeScreen 
+        <SimpleHomeScreen 
           onNavigate={handleNavigate}
           onPhysiotherapistSelect={handlePhysiotherapistSelect}
         />

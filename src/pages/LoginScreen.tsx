@@ -1,12 +1,5 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Activity, User, Stethoscope } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useAuth } from '@/context/AuthContext';
-import { UserType } from '@/types';
-import { useToast } from '@/hooks/use-toast';
 
 interface LoginScreenProps {
   onSuccess: () => void;
@@ -17,44 +10,28 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [userType, setUserType] = useState<UserType>('patient');
+  const [userType, setUserType] = useState<'patient' | 'physiotherapist'>('patient');
   const [isLoading, setIsLoading] = useState(false);
-  
-  const { login } = useAuth();
-  const { toast } = useToast();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    try {
-      const success = await login(email, password, userType);
-      if (success) {
-        toast({
-          title: "Login realizado com sucesso!",
-          description: "Bem-vindo de volta ao FisioVem.",
-        });
+    // Simular delay de login
+    setTimeout(() => {
+      setIsLoading(false);
+      
+      // Verificar credenciais demo ou qualquer email/senha para teste
+      if (email && password) {
         onSuccess();
       } else {
-        toast({
-          variant: "destructive",
-          title: "Erro no login",
-          description: "Email ou senha incorretos. Tente novamente.",
-        });
+        alert('Por favor, preencha email e senha.');
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Erro",
-        description: "Ocorreu um erro inesperado. Tente novamente.",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    }, 1000);
   };
 
   // Demo credentials helper
-  const fillDemoCredentials = (type: UserType) => {
+  const fillDemoCredentials = (type: 'patient' | 'physiotherapist') => {
     if (type === 'patient') {
       setEmail('maria.silva@email.com');
       setPassword('demo123');
@@ -79,116 +56,116 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
       </div>
 
       {/* Login Form */}
-      <div className="flex-1 bg-background rounded-t-3xl px-6 pt-8">
+      <div className="flex-1 bg-white rounded-t-3xl px-6 pt-8">
         <form onSubmit={handleLogin} className="space-y-6">
           {/* User Type Selection */}
           <div className="grid grid-cols-2 gap-3 mb-6">
-            <Button
+            <button
               type="button"
-              variant={userType === 'patient' ? 'default' : 'outline'}
               onClick={() => setUserType('patient')}
-              className="flex flex-col h-auto py-4 gap-2"
+              className={`flex flex-col items-center py-4 px-3 rounded-lg border-2 transition-colors ${
+                userType === 'patient' 
+                  ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+              }`}
             >
-              <User className="w-5 h-5" />
-              <span className="text-sm">Paciente</span>
-            </Button>
-            <Button
+              <User className="w-5 h-5 mb-2" />
+              <span className="text-sm font-medium">Paciente</span>
+            </button>
+            <button
               type="button"
-              variant={userType === 'physiotherapist' ? 'default' : 'outline'}
               onClick={() => setUserType('physiotherapist')}
-              className="flex flex-col h-auto py-4 gap-2"
+              className={`flex flex-col items-center py-4 px-3 rounded-lg border-2 transition-colors ${
+                userType === 'physiotherapist' 
+                  ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+              }`}
             >
-              <Stethoscope className="w-5 h-5" />
-              <span className="text-sm">Fisioterapeuta</span>
-            </Button>
+              <Stethoscope className="w-5 h-5 mb-2" />
+              <span className="text-sm font-medium">Fisioterapeuta</span>
+            </button>
           </div>
 
           {/* Email */}
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
+            <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
+            <input
               id="email"
               type="email"
               placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="h-12 text-base"
+              className="w-full h-12 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
           {/* Password */}
           <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
+            <label htmlFor="password" className="text-sm font-medium text-gray-700">Senha</label>
             <div className="relative">
-              <Input
+              <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-12 text-base pr-12"
+                className="w-full h-12 px-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <Button
+              <button
                 type="button"
-                variant="ghost"
-                size="sm"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
                 {showPassword ? (
                   <EyeOff className="w-4 h-4" />
                 ) : (
                   <Eye className="w-4 h-4" />
                 )}
-              </Button>
+              </button>
             </div>
           </div>
 
           {/* Login Button */}
-          <Button
+          <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-12 bg-gradient-primary text-base font-medium"
+            className="w-full h-12 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             {isLoading ? 'Entrando...' : 'Entrar'}
-          </Button>
+          </button>
         </form>
 
         {/* Demo Section */}
-        <Card className="mt-6 bg-muted/50 border-dashed">
-          <CardHeader>
-            <h3 className="text-sm font-medium text-center">Contas Demo</h3>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button
+        <div className="mt-6 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+          <h3 className="text-sm font-medium text-center text-gray-700 mb-3">Contas Demo</h3>
+          <div className="space-y-2">
+            <button
               type="button"
-              variant="outline"
               onClick={() => fillDemoCredentials('patient')}
-              className="w-full text-sm"
+              className="w-full py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Demo Paciente
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
-              variant="outline"
               onClick={() => fillDemoCredentials('physiotherapist')}
-              className="w-full text-sm"
+              className="w-full py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Demo Fisioterapeuta
-            </Button>
-          </CardContent>
-        </Card>
+            </button>
+          </div>
+        </div>
 
         {/* Register Link */}
         <div className="text-center mt-6 pb-6">
-          <p className="text-muted-foreground">
+          <p className="text-gray-600">
             Não tem uma conta?{' '}
             <button
               type="button"
               onClick={onRegister}
-              className="text-primary font-medium hover:underline"
+              className="text-blue-600 font-medium hover:underline"
             >
               Cadastre-se
             </button>
