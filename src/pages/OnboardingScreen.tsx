@@ -13,7 +13,7 @@ const onboardingSteps: OnboardingStep[] = [
   {
     icon: Home,
     title: 'Atendimento Domiciliar',
-    description: 'Receba fisioterapia profissional no conforto da sua casa, sem precisar se deslocar.',
+    description: 'Receba atendimento por um fisioterapeuta no conforto da sua casa, sem precisar se deslocar.',
     color: 'text-primary'
   },
   {

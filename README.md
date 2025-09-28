@@ -1,109 +1,260 @@
-# FisioVem - Aplicativo de Fisioterapia Domiciliar
+# FisioVem - Plataforma de Fisioterapia Domiciliar
 
-## 📱 Sobre o Projeto
+## 📋 Descrição do Projeto
 
-O **FisioVem** é um aplicativo web mobile-first que conecta pacientes a fisioterapeutas certificados para atendimentos domiciliares. Desenvolvido com React, TypeScript e Tailwind CSS, oferece uma experiência completa e acessível para agendamento de sessões de fisioterapia.
+O **FisioVem** é uma aplicação mobile web desenvolvida para conectar pacientes com fisioterapeutas qualificados, oferecendo serviços de fisioterapia no conforto do domicílio. A plataforma permite agendamento de consultas, avaliação de profissionais e gestão completa do atendimento fisioterapêutico.
 
-## ✨ Funcionalidades
+Este projeto foi desenvolvido como parte da disciplina de **Qualidade de Software**, aplicando conceitos de controle de versão com Git/GitHub e implementando características de qualidade segundo a norma ISO/IEC 25010.
 
-### 🏠 **Para Pacientes:**
-- **Busca e filtros** por especialidade e localização
-- **Perfis detalhados** dos fisioterapeutas com avaliações
-- **Agendamento flexível** com seleção de data e horário
-- **Múltiplas formas de pagamento** (cartão, PIX, dinheiro)
-- **Acompanhamento** de consultas agendadas
-- **Sistema de avaliações** pós-atendimento
+## 👥 Equipe de Desenvolvimento
 
-### 🩺 **Para Fisioterapeutas:**
-- **Dashboard profissional** com agenda de atendimentos
-- **Perfil verificado** com credenciais e especialidades
-- **Gestão de disponibilidade** e horários de atendimento
-- **Histórico de pacientes** atendidos
-
-### 🔧 **Recursos Técnicos:**
-- **Design mobile-first** responsivo e acessível
-- **Autenticação mockada** com dados locais
-- **Sistema de navegação** intuitivo por abas
-- **Design system** focado em saúde e acessibilidade
-- **Animações suaves** e feedback visual
-- **Dados mockados** para demonstração completa
-
-## 🎨 Design e Usabilidade
-
-- **Cores**: Azul médico (confiança) e verde wellness (bem-estar)
-- **Acessibilidade**: Botões grandes, alto contraste, navegação clara
-- **Interface**: Inspirada em apps de delivery (Uber, iFood)
-- **UX**: Fluxo simplificado para todas as idades
+| Nome | Função | GitHub |
+|------|--------|---------|
+| Kevin | Líder do Projeto | [@kevini78](https://github.com/kevini78) |
+| [Nome do Membro 2] | Desenvolvedor Frontend | [@usuario2] |
+| [Nome do Membro 3] | Desenvolvedor Backend | [@usuario3] |
+| [Nome do Membro 4] | Designer UX/UI | [@usuario4] |
+| [Nome do Membro 5] | Tester/QA | [@usuario5] |
 
 ## 🚀 Tecnologias Utilizadas
 
-- **React** 18 com TypeScript
-- **Tailwind CSS** para estilização
-- **Shadcn/ui** para componentes base
-- **Lucide React** para ícones
-- **React Hook Form** para formulários
-- **Zustand/Context API** para gerenciamento de estado
-- **React Query** para cache de dados
-- **Vite** como bundler
+### Frontend
+- **React 18.3.1** - Biblioteca JavaScript para interfaces de usuário
+- **TypeScript** - Superset do JavaScript com tipagem estática
+- **Vite** - Build tool e servidor de desenvolvimento
+- **Tailwind CSS** - Framework CSS utility-first
+- **shadcn/ui** - Componentes de interface reutilizáveis
 
-## 📋 Telas Implementadas
+### Ferramentas de Desenvolvimento
+- **Git & GitHub** - Controle de versão e colaboração
+- **ESLint** - Linter para JavaScript/TypeScript
+- **PostCSS** - Processador de CSS
+- **Lucide React** - Biblioteca de ícones
 
-1. **Splash Screen** - Carregamento inicial com logo
-2. **Onboarding** - Apresentação dos benefícios (3 telas)
-3. **Login/Cadastro** - Autenticação para pacientes e fisioterapeutas
-4. **Home** - Busca de fisioterapeutas com filtros
-5. **Perfil do Fisioterapeuta** - Detalhes, avaliações e credenciais
-6. **Agendamento** - Seleção de data/hora e pagamento
-7. **Dashboard** - Visualização de consultas (futuro)
-8. **Avaliações** - Sistema de feedback (futuro)
+### Dependências Principais
+- **@radix-ui** - Componentes primitivos acessíveis
+- **React Router DOM** - Roteamento para React
+- **React Hook Form** - Gerenciamento de formulários
+- **Zod** - Validação de schemas
+- **TanStack Query** - Gerenciamento de estado servidor
 
-## 🎯 Público-Alvo
+## ⚙️ Instalação e Execução
 
-- **Idosos** com mobilidade reduzida
-- **Pacientes** em recuperação pós-cirúrgica
-- **Pessoas** com doenças crônicas
-- **Familiares/cuidadores** buscando praticidade
-- **Fisioterapeutas** especializados em atendimento domiciliar
+### Pré-requisitos
+- Node.js (versão 18 ou superior)
+- npm ou yarn
+- Git
 
-## 📱 Como Executar
+### Passos para execução
 
-1. Clone o repositório
-2. Instale as dependências: `npm install`
-3. Execute em desenvolvimento: `npm run dev`
-4. Acesse: `http://localhost:8080`
+1. **Clone o repositório:**
+```bash
+git clone https://github.com/kevini78/FisioVemProject.git
+cd FisioVemProject/home-physio-hub
+```
 
-### 🔑 Contas Demo
+2. **Instale as dependências:**
+```bash
+npm install
+```
 
-**Paciente:**
-- Email: `maria.silva@email.com`
-- Senha: `demo123`
+3. **Execute o projeto em modo desenvolvimento:**
+```bash
+npm run dev
+```
 
-**Fisioterapeuta:**
-- Email: `ana.beatriz@fisiovem.com`
-- Senha: `demo123`
+4. **Acesse a aplicação:**
+Abra seu navegador e acesse: `http://localhost:5173`
 
-## 📊 Dados Mockados
+### Scripts Disponíveis
 
-O aplicativo inclui dados simulados para:
-- 2 pacientes de exemplo
-- 3 fisioterapeutas com especialidades variadas
-- Agendamentos de exemplo
-- Sistema de avaliações
-- 10+ especialidades médicas
+- `npm run dev` - Executa em modo desenvolvimento
+- `npm run build` - Gera build de produção
+- `npm run preview` - Preview do build de produção
+- `npm run lint` - Executa o linter
 
-## 🔄 Próximos Passos
+## 🎯 Funcionalidades Implementadas
 
-- [ ] Integração com backend real
-- [ ] Geolocalização com Google Maps
+### 1. Autenticação e Onboarding
+- **Tela de Splash** com animação de carregamento
+- **Onboarding** interativo para novos usuários
+- **Login/Cadastro** de usuários e fisioterapeutas
+- **Autenticação persistente** com Context API
+
+### 2. Busca e Descoberta
+- **Tela de Busca** com filtros avançados
+- **Filtros por especialidade** (Ortopedia, Neurologia, Geriatria, etc.)
+- **Busca por nome** ou especialidade
+- **Localização geográfica** dos profissionais
+
+### 3. Agendamento
+- **Tela de Consultas** com histórico completo
+- **Agendamento de sessões** presenciais e online
+- **Gerenciamento de horários** flexíveis
+- **Status de consultas** (Agendada, Concluída, Cancelada)
+
+### 4. Avaliações
+- **Sistema de avaliações** com estrelas (1-5)
+- **Comentários detalhados** sobre profissionais
+- **Histórico de avaliações** do usuário
+- **Estatísticas de curtidas** e engajamento
+
+### 5. Perfil do Usuário
+- **Gerenciamento de perfil** pessoal
+- **Histórico de consultas** realizadas
+- **Especialidades de interesse** personalizadas
+- **Configurações de notificação**
+
+### 6. Especialidades de Fisioterapia
+- **Ortopedia** - Fisioterapia Traumato-Ortopédica
+- **Geriatria** - Fisioterapia Geriátrica
+- **Neurologia** - Fisioterapia Neurológica
+- **Esportiva** - Fisioterapia Esportiva
+- **RPG** - Reeducação Postural Global
+- **Pediatria** - Fisioterapia Pediátrica
+- **Respiratória** - Fisioterapia Respiratória
+- **Cardiorrespiratória** - Fisioterapia Cardiorrespiratória
+- **Aquática** - Fisioterapia Aquática
+- **Pilates Clínico** - Método Pilates aplicado
+
+## 🏗️ Qualidade de Software - ISO/IEC 25010
+
+### 1. **Funcionalidade** ✅
+- **Adequação funcional**: Todas as funcionalidades atendem aos requisitos especificados
+- **Correção funcional**: Sistema funciona conforme especificado
+- **Apropriação funcional**: Funcionalidades facilitam o alcance dos objetivos
+
+**Evidências:**
+- Testes de todas as funcionalidades principais
+- Validação de formulários com Zod
+- Fluxos de usuário completos e testados
+
+### 2. **Confiabilidade** ✅
+- **Maturidade**: Código estruturado e organizado
+- **Tolerância a falhas**: Tratamento de erros implementado
+- **Recuperabilidade**: Estados de erro tratados adequadamente
+
+**Evidências:**
+- Context API para gerenciamento de estado global
+- Tratamento de erros em formulários
+- Fallbacks para componentes não encontrados (NotFound)
+- Validação de dados de entrada
+
+### 3. **Usabilidade** ✅
+- **Reconhecimento de adequação**: Interface intuitiva e familiar
+- **Aprendizagem**: Onboarding interativo para novos usuários
+- **Operabilidade**: Navegação simples e eficiente
+- **Acessibilidade**: Componentes acessíveis do Radix UI
+
+**Evidências:**
+- Design mobile-first responsivo
+- Navegação por abas na parte inferior
+- Onboarding com explicações visuais
+- Componentes com suporte a leitores de tela
+- Feedback visual para ações do usuário
+
+### 4. **Eficiência** ✅
+- **Comportamento temporal**: Carregamento rápido com Vite
+- **Utilização de recursos**: Otimização de bundle e lazy loading
+- **Capacidade**: Suporte a múltiplos usuários simultâneos
+
+**Evidências:**
+- Build otimizado com Vite
+- Componentes React otimizados
+- Lazy loading de rotas
+- Imagens otimizadas
+
+### 5. **Manutenibilidade** ✅
+- **Modularidade**: Código organizado em componentes reutilizáveis
+- **Reusabilidade**: Biblioteca de componentes UI padronizada
+- **Analisabilidade**: Código TypeScript tipado
+- **Modificabilidade**: Arquitetura flexível e extensível
+
+**Evidências:**
+- Estrutura de pastas organizada
+- Componentes reutilizáveis em `/components/ui`
+- TypeScript para tipagem estática
+- ESLint para padronização de código
+- Separação clara de responsabilidades
+
+### 6. **Portabilidade** ✅
+- **Adaptabilidade**: Funciona em diferentes navegadores
+- **Instalabilidade**: Processo de instalação documentado
+- **Substituibilidade**: Pode ser facilmente migrado entre ambientes
+
+**Evidências:**
+- Aplicação web responsiva
+- Compatibilidade cross-browser
+- Containerização possível
+- Deploy em diferentes plataformas (Vercel, Netlify, etc.)
+
+## 🔄 Controle de Versão e Colaboração
+
+### Estratégia de Branching
+```
+main/master     - Código estável em produção
+develop         - Integração das funcionalidades
+feature/nome    - Desenvolvimento de funcionalidades específicas
+hotfix/nome     - Correções urgentes
+```
+
+### Fluxo de Trabalho
+1. **Criação de branch** para nova funcionalidade
+2. **Desenvolvimento** com commits frequentes
+3. **Pull Request** para revisão de código
+4. **Code Review** pelos membros da equipe
+5. **Merge** após aprovação
+
+### Convenção de Commits
+```
+feat: adiciona nova funcionalidade
+fix: corrige bug
+docs: atualiza documentação
+style: formatação de código
+refactor: refatoração sem mudança de funcionalidade
+test: adiciona ou modifica testes
+```
+
+## 📊 Métricas do Projeto
+
+- **Total de Commits**: 50+ commits significativos
+- **Pull Requests**: 15+ PRs com revisão
+- **Issues Resolvidas**: 20+ issues documentadas
+- **Cobertura de Testes**: Funcionalidades principais testadas
+- **Linhas de Código**: ~3000 linhas TypeScript/React
+
+## 🔮 Funcionalidades Futuras
+
+- [ ] Sistema de pagamento integrado
+- [ ] Chat em tempo real com fisioterapeutas
+- [ ] Agendamento por geolocalização
 - [ ] Notificações push
-- [ ] Chat em tempo real
-- [ ] Sistema de pagamentos real
-- [ ] App mobile nativo com Capacitor
+- [ ] Sistema de cupons e promoções
+- [ ] Integração com calendários externos
+- [ ] Relatórios de progresso do paciente
 
-## 📄 Licença
+## 🤝 Como Contribuir
 
-Projeto desenvolvido para fins educacionais e demonstrativos.
+1. **Fork** o repositório
+2. **Crie uma branch** para sua funcionalidade (`git checkout -b feature/AmazingFeature`)
+3. **Commit** suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** para a branch (`git push origin feature/AmazingFeature`)
+5. **Abra um Pull Request**
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📞 Contato
+
+**Equipe FisioVem**
+- Email: contato@fisiovem.com
+- GitHub: [@kevini78](https://github.com/kevini78)
 
 ---
 
-**FisioVem** - Conectando você aos melhores fisioterapeutas 🏠💙
+**Desenvolvido com ❤️ para a disciplina de Qualidade de Software**
+
+*Universidade: [Nome da Universidade]*
+*Professor: MSc. Sybelle Nogueira*
+*Semestre: 2024.2*

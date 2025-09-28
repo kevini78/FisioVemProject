@@ -11,11 +11,15 @@ import { RegisterScreen } from "@/pages/RegisterScreen";
 import { HomeScreen } from "@/pages/HomeScreen";
 import { PhysiotherapistProfile } from "@/pages/PhysiotherapistProfile";
 import { AppointmentBooking } from "@/pages/AppointmentBooking";
+import { SearchScreen } from "@/pages/SearchScreen";
+import { ConsultationsScreen } from "@/pages/ConsultationsScreen";
+import { EvaluationsScreen } from "@/pages/EvaluationsScreen";
+import { ProfileScreen } from "@/pages/ProfileScreen";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'physio-profile' | 'appointment' | 'profile';
+type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'reviews' | 'profile' | 'physio-profile' | 'appointment';
 
 const AppContent = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
@@ -110,6 +114,18 @@ const AppContent = () => {
           onSuccess={() => setCurrentScreen('home')}
         />
       );
+    
+    case 'search':
+      return <SearchScreen />;
+    
+    case 'appointments':
+      return <ConsultationsScreen />;
+    
+    case 'reviews':
+      return <EvaluationsScreen />;
+    
+    case 'profile':
+      return <ProfileScreen />;
     
     default:
       return <NotFound />;

@@ -27,7 +27,7 @@ export const HomeScreen = ({ onNavigate, onPhysiotherapistSelect }: HomeScreenPr
   });
 
   return (
-    <MobileLayout showNavigation currentPage="home">
+    <MobileLayout showNavigation currentPage="home" onPageChange={onNavigate}>
       <Header
         title="FisioVem"
         showNotifications

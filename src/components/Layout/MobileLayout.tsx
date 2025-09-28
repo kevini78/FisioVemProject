@@ -5,12 +5,14 @@ interface MobileLayoutProps {
   children: ReactNode;
   showNavigation?: boolean;
   currentPage?: string;
+  onPageChange?: (page: string) => void;
 }
 
 export const MobileLayout = ({ 
   children, 
   showNavigation = true, 
-  currentPage = 'home' 
+  currentPage = 'home',
+  onPageChange
 }: MobileLayoutProps) => {
   return (
     <div className="min-h-screen bg-background flex flex-col max-w-md mx-auto">
@@ -21,7 +23,7 @@ export const MobileLayout = ({
       
       {/* Bottom Navigation */}
       {showNavigation && (
-        <BottomNavigation currentPage={currentPage} />
+        <BottomNavigation currentPage={currentPage} onPageChange={onPageChange} />
       )}
     </div>
   );
