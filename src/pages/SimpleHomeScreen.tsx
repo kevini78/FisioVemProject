@@ -5,15 +5,26 @@ interface SimpleHomeScreenProps {
 
 export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: SimpleHomeScreenProps) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-500 to-green-500 text-white p-6">
-        <h1 className="text-2xl font-bold">🏥 FisioVem</h1>
-        <p className="text-blue-100 mt-1">Olá! Bem-vindo ao seu app de fisioterapia</p>
-      </div>
+    <div className="mobile-container">
+      <div className="mobile-safe-area min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
+        {/* Status Bar Spacer */}
+        <div className="h-2 bg-gradient-to-r from-blue-500 to-green-500"></div>
+        
+        {/* Header */}
+        <div className="bg-gradient-to-r from-blue-500 to-green-500 text-white px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold">🏥 FisioVem</h1>
+              <p className="text-blue-100 mt-1">Olá! Bem-vindo ao seu app</p>
+            </div>
+            <button className="mobile-touch-target bg-white/20 rounded-full p-2">
+              <span className="text-2xl">🔔</span>
+            </button>
+          </div>
+        </div>
 
-      {/* Content */}
-      <div className="p-6 space-y-6">
+        {/* Content */}
+        <div className="mobile-scroll flex-1 px-4 py-4 space-y-4 pb-24">
         {/* Welcome Card */}
         <div className="bg-white rounded-xl p-6 shadow-lg">
           <h2 className="text-xl font-semibold text-gray-800 mb-3">
@@ -39,18 +50,18 @@ export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: Simple
           </div>
         </div>
 
-        {/* Search */}
-        <div className="bg-white rounded-xl p-4 shadow-lg">
-          <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Buscar fisioterapeutas ou especialidades..."
-              className="w-full h-12 pl-12 pr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-              🔍
+          {/* Search */}
+          <div className="bg-white rounded-xl p-4 shadow-lg">
+            <div className="relative mb-4">
+              <input
+                type="text"
+                placeholder="Buscar fisioterapeutas..."
+                className="mobile-input w-full pl-12 pr-4"
+              />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                🔍
+              </div>
             </div>
-          </div>
           
           <div className="flex items-center text-sm text-gray-600 mb-4">
             <span className="mr-2">📍</span>
@@ -112,8 +123,34 @@ export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: Simple
           </div>
         </div>
 
-        {/* Bottom spacing for mobile */}
-        <div className="h-20"></div>
+          {/* Bottom spacing for mobile navigation */}
+          <div className="h-4"></div>
+        </div>
+
+        {/* Mobile Bottom Navigation */}
+        <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-[428px] bg-white border-t border-gray-200 px-4 py-2 mobile-safe-area">
+          <div className="flex items-center justify-around">
+            {[
+              { id: 'home', icon: '🏠', label: 'Início', active: true },
+              { id: 'search', icon: '🔍', label: 'Buscar', active: false },
+              { id: 'appointments', icon: '📅', label: 'Consultas', active: false },
+              { id: 'profile', icon: '👤', label: 'Perfil', active: false }
+            ].map((item) => (
+              <button
+                key={item.id}
+                onClick={() => onNavigate(item.id)}
+                className={`mobile-touch-target flex flex-col items-center py-2 px-3 rounded-lg transition-all ${
+                  item.active 
+                    ? 'text-blue-600 bg-blue-50' 
+                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <span className="text-xl mb-1">{item.icon}</span>
+                <span className="text-xs font-medium">{item.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

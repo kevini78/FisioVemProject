@@ -43,20 +43,24 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero flex flex-col">
-      {/* Header */}
-      <div className="text-center pt-12 pb-8">
-        <div className="flex justify-center mb-4">
-          <div className="flex items-center justify-center w-16 h-16 bg-white/20 rounded-xl backdrop-blur-sm">
-            <Activity className="w-8 h-8 text-white" />
+    <div className="mobile-container">
+      <div className="mobile-safe-area min-h-screen bg-gradient-hero flex flex-col">
+        {/* Status Bar Spacer */}
+        <div className="h-2 bg-gradient-hero"></div>
+        
+        {/* Header */}
+        <div className="text-center pt-8 pb-8 px-4">
+          <div className="flex justify-center mb-4">
+            <div className="flex items-center justify-center w-20 h-20 bg-white/20 rounded-2xl backdrop-blur-sm">
+              <Activity className="w-10 h-10 text-white" />
+            </div>
           </div>
+          <h1 className="text-3xl font-bold text-white mb-2">Bem-vindo de volta</h1>
+          <p className="text-white/80 text-lg">Faça login para continuar</p>
         </div>
-        <h1 className="text-2xl font-bold text-white mb-2">Bem-vindo de volta</h1>
-        <p className="text-white/80">Faça login para continuar</p>
-      </div>
 
-      {/* Login Form */}
-      <div className="flex-1 bg-white rounded-t-3xl px-6 pt-8">
+        {/* Login Form */}
+        <div className="flex-1 bg-white rounded-t-3xl px-4 pt-8 mobile-scroll">
         <form onSubmit={handleLogin} className="space-y-6">
           {/* User Type Selection */}
           <div className="grid grid-cols-2 gap-3 mb-6">
@@ -96,7 +100,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full h-12 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="mobile-input w-full"
             />
           </div>
 
@@ -111,12 +115,12 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full h-12 px-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="mobile-input w-full pr-12"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="mobile-touch-target absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 p-2"
               >
                 {showPassword ? (
                   <EyeOff className="w-4 h-4" />
@@ -131,7 +135,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-12 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="mobile-btn w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? 'Entrando...' : 'Entrar'}
           </button>
@@ -144,32 +148,33 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
             <button
               type="button"
               onClick={() => fillDemoCredentials('patient')}
-              className="w-full py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="mobile-btn w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
             >
-              Demo Paciente
+              👤 Demo Paciente
             </button>
             <button
               type="button"
               onClick={() => fillDemoCredentials('physiotherapist')}
-              className="w-full py-2 px-4 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="mobile-btn w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
             >
-              Demo Fisioterapeuta
+              🩺 Demo Fisioterapeuta
             </button>
           </div>
         </div>
 
         {/* Register Link */}
-        <div className="text-center mt-6 pb-6">
+        <div className="text-center mt-6 pb-8">
           <p className="text-gray-600">
             Não tem uma conta?{' '}
             <button
               type="button"
               onClick={onRegister}
-              className="text-blue-600 font-medium hover:underline"
+              className="text-blue-600 font-medium hover:underline mobile-touch-target"
             >
               Cadastre-se
             </button>
           </p>
+        </div>
         </div>
       </div>
     </div>
