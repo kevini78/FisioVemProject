@@ -155,12 +155,18 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
           </>
         )}
         
-        {consultation.status === 'pendente' && (
+        {consultation.status === 'agendada' && (
           <>
-            <button className="mobile-btn flex-1 bg-green-600 text-white">
+            <button 
+              onClick={() => handleConfirmConsultation(consultation.id)}
+              className="mobile-btn flex-1 bg-green-600 text-white"
+            >
               ✅ Confirmar
             </button>
-            <button className="mobile-btn flex-1 bg-red-600 text-white">
+            <button 
+              onClick={() => handleCancelConsultation(consultation.id)}
+              className="mobile-btn flex-1 bg-red-600 text-white"
+            >
               ❌ Cancelar
             </button>
           </>
@@ -201,13 +207,16 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
           <div className="grid grid-cols-3 gap-4 text-center">
             <div className="bg-white/20 rounded-lg p-3">
               <div className="text-2xl font-bold text-white">
-                {consultations.proximas.length}
+                {consultations.filter(c => 
+                  c.status === 'agendada' || c.status === 'confirmada' || 
+                  (new Date(c.date) >= new Date() && c.status !== 'cancelada' && c.status !== 'concluida')
+                ).length}
               </div>
               <div className="text-sm text-white/80">Próximas</div>
             </div>
             <div className="bg-white/20 rounded-lg p-3">
               <div className="text-2xl font-bold text-white">
-                {consultations.concluidas.length}
+                {consultations.filter(c => c.status === 'concluida').length}
               </div>
               <div className="text-sm text-white/80">Concluídas</div>
             </div>

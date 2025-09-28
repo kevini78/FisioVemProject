@@ -23,20 +23,21 @@ const AppContent = () => {
   const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
 
   useEffect(() => {
+    // Para desenvolvimento: sempre limpar localStorage para ver o fluxo completo
+    localStorage.clear();
+    
     const onboardingCompleted = localStorage.getItem('fisiovem_onboarding_completed');
     setHasSeenOnboarding(!!onboardingCompleted);
 
-    const currentUser = apiService.getCurrentUser();
-    if (currentUser) {
-      setIsAuthenticated(true);
-    }
+    // NÃO fazer login automático - usuário deve passar pelo fluxo
+    setIsAuthenticated(false);
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated && currentScreen !== 'home') {
+    if (isAuthenticated && currentScreen !== 'home' && currentScreen !== 'booking' && currentScreen !== 'appointments' && currentScreen !== 'search' && currentScreen !== 'profile') {
       setCurrentScreen('home');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, currentScreen]);
 
   const handleSplashComplete = () => {
     if (!hasSeenOnboarding) {

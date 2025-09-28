@@ -80,7 +80,10 @@ export const BookingScreen = ({ physiotherapist, onBack, onSuccess }: BookingScr
 
       if (result.success) {
         alert('Consulta agendada com sucesso!');
-        onSuccess();
+        // Aguardar um pouco antes de navegar para garantir que o alert seja visto
+        setTimeout(() => {
+          onSuccess();
+        }, 1000);
       } else {
         alert(result.error || 'Erro ao agendar consulta');
       }
