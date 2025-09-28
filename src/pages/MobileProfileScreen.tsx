@@ -1,19 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { apiService } from '@/services/api';
 
 interface MobileProfileScreenProps {
   onNavigate: (page: string) => void;
 }
 
 export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) => {
-  const [user] = useState({
-    name: 'Maria Silva',
-    email: 'maria.silva@email.com',
-    phone: '(11) 99999-9999',
-    address: 'Rua das Flores, 123 - Vila Madalena, São Paulo',
-    memberSince: '2024-01-15',
-    totalConsultations: 12,
-    favoriteSpecialties: ['Ortopedia', 'Neurologia']
-  });
+  const [user, setUser] = useState<any>(null);
+  const [totalConsultations, setTotalConsultations] = useState(0);
+
+  useEffect(() => {
+    const currentUser = apiService.getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
+      const consultations = apiService.getConsultations(currentUser.id);
+      setTotalConsultations(consultations.length);
+    }
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="mobile-container">
+        <div className="mobile-safe-area min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-4xl mb-4">👤</div>
+            <p className="text-gray-600">Carregando perfil...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const MenuOption = ({ 
     icon, 
@@ -83,7 +99,7 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
               <p className="text-white/80">{user.email}</p>
               <div className="flex items-center mt-2">
                 <span className="bg-white/20 px-2 py-1 rounded-full text-xs text-white">
-                  Membro desde {new Date(user.memberSince).toLocaleDateString('pt-BR')}
+                  Membro desde {new Date(user.createdAt).toLocaleDateString('pt-BR')}
                 </span>
               </div>
             </div>
@@ -92,11 +108,11 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
           {/* Stats */}
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white/20 rounded-lg p-3 text-center">
-              <div className="text-2xl font-bold text-white">{user.totalConsultations}</div>
+              <div className="text-2xl font-bold text-white">{totalConsultations}</div>
               <div className="text-sm text-white/80">Consultas</div>
             </div>
             <div className="bg-white/20 rounded-lg p-3 text-center">
-              <div className="text-2xl font-bold text-white">{user.favoriteSpecialties.length}</div>
+              <div className="text-2xl font-bold text-white">{user.userType === 'patient' ? 2 : 5}</div>
               <div className="text-sm text-white/80">Especialidades</div>
             </div>
           </div>
@@ -131,7 +147,7 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
                 <span className="text-lg">📍</span>
                 <div>
                   <p className="text-sm text-gray-500">Endereço</p>
-                  <p className="text-gray-800">{user.address}</p>
+                  <p className="text-gray-800">{user.address || 'Não informado'}</p>
                 </div>
               </div>
             </div>
@@ -210,7 +226,7 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
             </div>
             <div className="p-4">
               <div className="flex flex-wrap gap-2">
-                {user.favoriteSpecialties.map((specialty) => (
+                {['Ortopedia', 'Neurologia'].map((specialty) => (
                   <span key={specialty} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
                     {specialty}
                   </span>

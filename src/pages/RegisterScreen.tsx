@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { apiService } from '@/services/api';
+import { Toast } from '@/components/Toast';
 import type { UserType } from '@/services/api';
 
 interface RegisterScreenProps {
@@ -27,6 +28,7 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userType, setUserType] = useState<UserType>('patient');
   const [isLoading, setIsLoading] = useState(false);
+  const [toast, setToast] = useState<{message: string; type: 'success' | 'error' | 'info'} | null>(null);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +46,12 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
     setIsLoading(true);
 
     try {
+      console.log('Tentativa de cadastro:', { 
+        email: formData.email, 
+        name: formData.name,
+        userType 
+      });
+
       const result = await apiService.register({
         name: formData.name,
         email: formData.email,
@@ -53,14 +61,30 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
         userType
       });
 
+      console.log('Resultado do cadastro:', result);
+
       if (result.success) {
-        alert('Cadastro realizado com sucesso!');
-        onSuccess();
+        console.log('Cadastro bem-sucedido, usuário criado:', result.user);
+        setToast({
+          message: 'Cadastro realizado com sucesso! Agora você pode fazer login.',
+          type: 'success'
+        });
+        setTimeout(() => {
+          onBack(); // Volta para tela de login após mostrar o toast
+        }, 2000);
       } else {
-        alert(result.error || 'Erro ao criar conta.');
+        console.log('Erro no cadastro:', result.error);
+        setToast({
+          message: result.error || 'Erro ao criar conta.',
+          type: 'error'
+        });
       }
     } catch (error) {
-      alert('Ocorreu um erro ao criar sua conta. Tente novamente.');
+      console.error('Erro inesperado no cadastro:', error);
+      setToast({
+        message: 'Ocorreu um erro inesperado. Tente novamente.',
+        type: 'error'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -71,8 +95,16 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
   };
 
   return (
-    <div className="mobile-container">
-      <div className="mobile-safe-area min-h-screen bg-gradient-hero flex flex-col">
+    <>
+      {toast && (
+        <Toast 
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+      <div className="mobile-container">
+        <div className="mobile-safe-area min-h-screen bg-gradient-hero flex flex-col">
       {/* Header */}
       <div className="flex items-center text-white p-4">
         <Button
@@ -279,6 +311,7 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
         </div>
       </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };

@@ -1,4 +1,4 @@
-// Simple API service using localStorage to simulate backend
+// Serviço de API simples usando localStorage para simular backend
 
 export interface User {
   id: string;
@@ -45,12 +45,13 @@ class ApiService {
     return `fisiovem_${key}`;
   }
 
-  // User Authentication
+  // Autenticação de Usuário
   async register(userData: Omit<User, 'id' | 'createdAt'>): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
       const users = this.getUsers();
+      console.log('Usuários existentes antes do cadastro:', users.map(u => u.email));
       
-      // Check if email already exists
+      // Verificar se o email já existe
       if (users.find(u => u.email === userData.email)) {
         return { success: false, error: 'E-mail já cadastrado' };
       }
@@ -63,12 +64,15 @@ class ApiService {
 
       users.push(newUser);
       localStorage.setItem(this.getStorageKey('users'), JSON.stringify(users));
+      console.log('Usuário salvo na lista:', newUser);
+      console.log('Lista atualizada de usuários:', users.map(u => u.email));
       
-      // Auto login after registration
-      localStorage.setItem(this.getStorageKey('current_user'), JSON.stringify(newUser));
+      // NÃO fazer login automático - usuário deve fazer login manualmente
+      console.log('Cadastro concluído sem login automático');
 
       return { success: true, user: newUser };
     } catch (error) {
+      console.error('Erro no cadastro:', error);
       return { success: false, error: 'Erro ao criar conta' };
     }
   }
@@ -76,15 +80,21 @@ class ApiService {
   async login(email: string, password: string): Promise<{ success: boolean; user?: User; error?: string }> {
     try {
       const users = this.getUsers();
+      console.log('Usuários disponíveis para login:', users.map(u => ({ email: u.email, userType: u.userType })));
+      console.log('Buscando usuário com email:', email, 'e senha:', password);
+      
       const user = users.find(u => u.email === email && u.password === password);
+      console.log('Usuário encontrado:', user ? { email: user.email, userType: user.userType } : 'Nenhum');
 
       if (!user) {
         return { success: false, error: 'E-mail ou senha incorretos' };
       }
 
       localStorage.setItem(this.getStorageKey('current_user'), JSON.stringify(user));
+      console.log('Usuário salvo como atual:', user);
       return { success: true, user };
     } catch (error) {
+      console.error('Erro no login:', error);
       return { success: false, error: 'Erro ao fazer login' };
     }
   }
@@ -140,6 +150,43 @@ class ApiService {
 
   async updateConsultationStatus(consultationId: string, status: Consultation['status']): Promise<{ success: boolean; error?: string }> {
     try {
+      // Buscar TODAS as consultas para poder atualizar
+      const consultations = this.getConsultations(); // Sem userId para pegar todas
+      console.log('Todas as consultas antes da atualização:', consultations);
+      console.log('Procurando consulta com ID:', consultationId);
+      
+      const consultationIndex = consultations.findIndex(c => c.id === consultationId);
+      console.log('Índice da consulta encontrada:', consultationIndex);
+      
+      if (consultationIndex === -1) {
+        console.log('Consulta não encontrada!');
+        return { success: false, error: 'Consulta não encontrada' };
+      }
+
+      console.log('Consulta antes da atualização:', consultations[consultationIndex]);
+      consultations[consultationIndex].status = status;
+      console.log('Consulta após atualização:', consultations[consultationIndex]);
+      
+      localStorage.setItem(this.getStorageKey('consultations'), JSON.stringify(consultations));
+      console.log('Consultas salvas no localStorage');
+
+      return { success: true };
+    } catch (error) {
+      console.error('Erro ao atualizar consulta:', error);
+      return { success: false, error: 'Erro ao atualizar consulta' };
+    }
+  }
+
+  async cancelConsultation(consultationId: string): Promise<{ success: boolean; error?: string }> {
+    console.log('=== CANCELANDO CONSULTA ===');
+    console.log('ID recebido:', consultationId);
+    const result = await this.updateConsultationStatus(consultationId, 'cancelada');
+    console.log('Resultado do cancelamento:', result);
+    return result;
+  }
+
+  async updateConsultationDateTime(consultationId: string, newDate: string, newTime: string): Promise<{ success: boolean; error?: string }> {
+    try {
       const consultations = this.getConsultations();
       const consultationIndex = consultations.findIndex(c => c.id === consultationId);
       
@@ -147,20 +194,17 @@ class ApiService {
         return { success: false, error: 'Consulta não encontrada' };
       }
 
-      consultations[consultationIndex].status = status;
+      consultations[consultationIndex].date = newDate;
+      consultations[consultationIndex].time = newTime;
       localStorage.setItem(this.getStorageKey('consultations'), JSON.stringify(consultations));
 
       return { success: true };
     } catch (error) {
-      return { success: false, error: 'Erro ao atualizar consulta' };
+      return { success: false, error: 'Erro ao reagendar consulta' };
     }
   }
 
-  async cancelConsultation(consultationId: string): Promise<{ success: boolean; error?: string }> {
-    return this.updateConsultationStatus(consultationId, 'cancelada');
-  }
-
-  // Physiotherapists
+  // Fisioterapeutas
   getPhysiotherapists(): Physiotherapist[] {
     const defaultPhysiotherapists: Physiotherapist[] = [
       {
@@ -222,6 +266,132 @@ class ApiService {
         price: 140,
         available: true,
         bio: 'Fisioterapeuta pediátrica especializada em desenvolvimento motor infantil.'
+      },
+      // Mais fisioterapeutas para Ortopedia
+      {
+        id: 'physio_7',
+        name: 'Dr. Roberto Silva',
+        specialty: 'Ortopedia',
+        experience: '15 anos',
+        rating: 4.9,
+        price: 130,
+        available: true,
+        bio: 'Especialista em ortopedia com foco em coluna vertebral e articulações.'
+      },
+      {
+        id: 'physio_8',
+        name: 'Dra. Fernanda Rocha',
+        specialty: 'Ortopedia',
+        experience: '11 anos',
+        rating: 4.7,
+        price: 125,
+        available: true,
+        bio: 'Fisioterapeuta ortopédica especializada em lesões de joelho e quadril.'
+      },
+      // Mais fisioterapeutas para Neurologia
+      {
+        id: 'physio_9',
+        name: 'Dr. André Martins',
+        specialty: 'Neurologia',
+        experience: '14 anos',
+        rating: 4.8,
+        price: 160,
+        available: true,
+        bio: 'Neurologista com especialização em Parkinson e esclerose múltipla.'
+      },
+      {
+        id: 'physio_10',
+        name: 'Dra. Camila Nunes',
+        specialty: 'Neurologia',
+        experience: '9 anos',
+        rating: 4.6,
+        price: 145,
+        available: true,
+        bio: 'Especialista em reabilitação neurológica pós-trauma.'
+      },
+      // Mais fisioterapeutas para Esportiva
+      {
+        id: 'physio_11',
+        name: 'Dr. Bruno Alves',
+        specialty: 'Esportiva',
+        experience: '8 anos',
+        rating: 4.8,
+        price: 115,
+        available: true,
+        bio: 'Fisioterapeuta esportivo com experiência em atletas profissionais.'
+      },
+      {
+        id: 'physio_12',
+        name: 'Dra. Juliana Castro',
+        specialty: 'Esportiva',
+        experience: '7 anos',
+        rating: 4.5,
+        price: 105,
+        available: true,
+        bio: 'Especialista em prevenção e tratamento de lesões esportivas.'
+      },
+      // Mais fisioterapeutas para Geriatria
+      {
+        id: 'physio_13',
+        name: 'Dr. Sérgio Barbosa',
+        specialty: 'Geriatria',
+        experience: '16 anos',
+        rating: 4.9,
+        price: 135,
+        available: true,
+        bio: 'Geriatra com foco em fisioterapia preventiva para idosos.'
+      },
+      {
+        id: 'physio_14',
+        name: 'Dra. Regina Campos',
+        specialty: 'Geriatria',
+        experience: '13 anos',
+        rating: 4.7,
+        price: 128,
+        available: true,
+        bio: 'Especialista em reabilitação geriátrica e cuidados domiciliares.'
+      },
+      // Mais fisioterapeutas para RPG
+      {
+        id: 'physio_15',
+        name: 'Dr. Marcos Pereira',
+        specialty: 'RPG',
+        experience: '10 anos',
+        rating: 4.8,
+        price: 118,
+        available: true,
+        bio: 'Especialista em RPG e correção postural avançada.'
+      },
+      {
+        id: 'physio_16',
+        name: 'Dra. Patrícia Gomes',
+        specialty: 'RPG',
+        experience: '8 anos',
+        rating: 4.6,
+        price: 112,
+        available: true,
+        bio: 'Fisioterapeuta RPG com foco em dores crônicas e postura.'
+      },
+      // Mais fisioterapeutas para Pediatria
+      {
+        id: 'physio_17',
+        name: 'Dr. Rafael Souza',
+        specialty: 'Pediatria',
+        experience: '11 anos',
+        rating: 4.8,
+        price: 145,
+        available: true,
+        bio: 'Pediatra especializado em fisioterapia respiratória infantil.'
+      },
+      {
+        id: 'physio_18',
+        name: 'Dra. Carla Mendes',
+        specialty: 'Pediatria',
+        experience: '7 anos',
+        rating: 4.7,
+        price: 138,
+        available: true,
+        bio: 'Fisioterapeuta pediátrica com foco em desenvolvimento neuromotor.'
       }
     ];
 
@@ -243,11 +413,11 @@ class ApiService {
     }
   }
 
-  // Initialize with demo data
+  // Inicializar com dados demo
   initializeDemoData(): void {
     const users = this.getUsers();
     
-    // Add demo users if they don't exist
+    // Adicionar usuários demo se não existirem
     if (!users.find(u => u.email === 'maria.silva@email.com')) {
       const demoPatient: User = {
         id: 'demo_patient',

@@ -8,7 +8,7 @@ import { LoginScreen } from "@/pages/LoginScreen";
 import { RegisterScreen } from "@/pages/RegisterScreen";
 import { SimpleHomeScreen } from "@/pages/SimpleHomeScreen";
 import { MobileSearchScreen } from "@/pages/MobileSearchScreen";
-import { MobileConsultationsScreen } from "@/pages/MobileConsultationsScreen";
+import { SimpleConsultationsScreen } from "@/pages/SimpleConsultationsScreen";
 import { MobileProfileScreen } from "@/pages/MobileProfileScreen";
 import { BookingScreen } from "@/pages/BookingScreen";
 import { BookingSuccessScreen } from "@/pages/BookingSuccessScreen";
@@ -24,8 +24,10 @@ const AppContent = () => {
   const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
 
   useEffect(() => {
-    // Para desenvolvimento: sempre limpar localStorage para ver o fluxo completo
-    localStorage.clear();
+    // Para desenvolvimento: limpar apenas onboarding para ver o fluxo completo
+    // Mas manter usuários criados e outras configurações
+    localStorage.removeItem('fisiovem_onboarding_completed');
+    localStorage.removeItem('fisiovem_current_user');
     
     const onboardingCompleted = localStorage.getItem('fisiovem_onboarding_completed');
     setHasSeenOnboarding(!!onboardingCompleted);
@@ -101,10 +103,10 @@ const AppContent = () => {
       );
     
     case 'search':
-      return <MobileSearchScreen onNavigate={handleNavigate} />;
+      return <MobileSearchScreen onNavigate={handleNavigate} onPhysiotherapistSelect={handlePhysiotherapistSelect} />;
     
     case 'appointments':
-      return <MobileConsultationsScreen onNavigate={handleNavigate} />;
+      return <SimpleConsultationsScreen onNavigate={handleNavigate} />;
     
     case 'profile':
       return <MobileProfileScreen onNavigate={handleNavigate} />;

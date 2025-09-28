@@ -18,32 +18,27 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
     e.preventDefault();
     setIsLoading(true);
 
+    console.log('Tentativa de login:', { email, userType });
+
     try {
       const result = await apiService.login(email, password);
+      console.log('Resultado do login:', result);
       
       if (result.success) {
+        console.log('Login bem-sucedido, usuário:', result.user);
         onSuccess();
       } else {
+        console.log('Erro no login:', result.error);
         alert(result.error || 'E-mail ou senha incorretos.');
       }
     } catch (error) {
+      console.error('Erro inesperado no login:', error);
       alert('Erro inesperado ao fazer login');
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Demo credentials helper
-  const fillDemoCredentials = (type: 'patient' | 'physiotherapist') => {
-    if (type === 'patient') {
-      setEmail('maria.silva@email.com');
-      setPassword('demo123');
-    } else {
-      setEmail('ana.beatriz@fisiovem.com');
-      setPassword('demo123');
-    }
-    setUserType(type);
-  };
 
   return (
     <div className="mobile-container">
@@ -144,26 +139,6 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
           </button>
         </form>
 
-        {/* Demo Section */}
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-          <h3 className="text-sm font-medium text-center text-gray-700 mb-3">Contas Demo</h3>
-          <div className="space-y-2">
-            <button
-              type="button"
-              onClick={() => fillDemoCredentials('patient')}
-              className="mobile-btn w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-            >
-              👤 Demo Paciente
-            </button>
-            <button
-              type="button"
-              onClick={() => fillDemoCredentials('physiotherapist')}
-              className="mobile-btn w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
-            >
-              🩺 Demo Fisioterapeuta
-            </button>
-          </div>
-        </div>
 
         {/* Register Link */}
         <div className="text-center mt-6 pb-8">

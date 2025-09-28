@@ -39,17 +39,23 @@ export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: Simple
 
         {/* Quick Actions */}
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-4 text-center">
+          <button 
+            onClick={() => onNavigate('search')}
+            className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-4 text-center mobile-touch-target hover:from-blue-600 hover:to-blue-700 transition-all"
+          >
             <div className="text-3xl mb-2">🏠</div>
             <h3 className="font-semibold mb-1">Atendimento</h3>
             <p className="text-sm opacity-90">Domiciliar</p>
-          </div>
+          </button>
           
-          <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-4 text-center">
+          <button 
+            onClick={() => onNavigate('search')}
+            className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-4 text-center mobile-touch-target hover:from-green-600 hover:to-green-700 transition-all"
+          >
             <div className="text-3xl mb-2">📅</div>
             <h3 className="font-semibold mb-1">Agendamento</h3>
             <p className="text-sm opacity-90">Rápido</p>
-          </div>
+          </button>
         </div>
 
           {/* Search */}

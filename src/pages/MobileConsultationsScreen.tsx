@@ -11,17 +11,21 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log('MobileConsultationsScreen montado');
     loadConsultations();
   }, []);
 
   const loadConsultations = () => {
     try {
       const currentUser = apiService.getCurrentUser();
+      console.log('Usuário atual na tela de consultas:', currentUser);
+      
       if (currentUser) {
         const userConsultations = apiService.getConsultations(currentUser.id);
+        console.log('Consultas do usuário:', userConsultations);
         setConsultations(userConsultations || []);
       } else {
-        console.warn('Nenhum usuário logado encontrado');
+        console.warn('Nenhum usuário logado encontrado na tela de consultas');
         setConsultations([]);
       }
     } catch (error) {
@@ -195,9 +199,24 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
     </div>
   );
 
-  return (
-    <div className="mobile-container">
-      <div className="mobile-safe-area min-h-screen bg-gray-50">
+  // Fallback de segurança
+  if (isLoading) {
+    return (
+      <div className="mobile-container">
+        <div className="mobile-safe-area min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-4xl mb-4">⏳</div>
+            <p className="text-gray-600">Carregando consultas...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  try {
+    return (
+      <div className="mobile-container">
+        <div className="mobile-safe-area min-h-screen bg-gray-50">
         {/* Status Bar Spacer */}
         <div className="h-2 bg-white"></div>
         
@@ -326,5 +345,25 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
         </div>
       </div>
     </div>
-  );
+    );
+  } catch (error) {
+    console.error('Erro na renderização da tela de consultas:', error);
+    return (
+      <div className="mobile-container">
+        <div className="mobile-safe-area min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-4xl mb-4">⚠️</div>
+            <h2 className="text-lg font-bold text-gray-800 mb-2">Ops! Algo deu errado</h2>
+            <p className="text-gray-600 mb-4">Não foi possível carregar suas consultas.</p>
+            <button
+              onClick={() => onNavigate('home')}
+              className="mobile-btn bg-blue-600 text-white"
+            >
+              🏠 Voltar ao Início
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };

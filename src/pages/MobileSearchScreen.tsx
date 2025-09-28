@@ -1,53 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { apiService } from '@/services/api';
 
 interface MobileSearchScreenProps {
   onNavigate: (page: string) => void;
+  onPhysiotherapistSelect?: (id: string) => void;
 }
 
-export const MobileSearchScreen = ({ onNavigate }: MobileSearchScreenProps) => {
+export const MobileSearchScreen = ({ onNavigate, onPhysiotherapistSelect }: MobileSearchScreenProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null);
+  const [physiotherapists, setPhysiotherapists] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Carregar fisioterapeutas do apiService
+    const allPhysiotherapists = apiService.getPhysiotherapists();
+    console.log('Fisioterapeutas carregados:', allPhysiotherapists);
+    setPhysiotherapists(allPhysiotherapists);
+  }, []);
 
   const specialties = [
-    { name: 'Ortopedia', icon: '🦴', count: 12 },
-    { name: 'Neurologia', icon: '🧠', count: 8 },
-    { name: 'Geriatria', icon: '👴', count: 6 },
-    { name: 'Esportiva', icon: '⚽', count: 10 },
-    { name: 'RPG', icon: '🧘', count: 5 },
-    { name: 'Pediatria', icon: '👶', count: 4 }
-  ];
-
-  const physiotherapists = [
-    { 
-      id: '1',
-      name: 'Dr. Carlos Silva', 
-      specialty: 'Ortopedia', 
-      rating: 4.9, 
-      experience: '8 anos',
-      price: 'R$ 120',
-      distance: '2.1 km',
-      available: true
-    },
-    { 
-      id: '2',
-      name: 'Dra. Ana Costa', 
-      specialty: 'Neurologia', 
-      rating: 4.8, 
-      experience: '12 anos',
-      price: 'R$ 150',
-      distance: '3.5 km',
-      available: true
-    },
-    { 
-      id: '3',
-      name: 'Dr. Pedro Oliveira', 
-      specialty: 'Esportiva', 
-      rating: 4.7, 
-      experience: '6 anos',
-      price: 'R$ 100',
-      distance: '1.8 km',
-      available: false
-    }
+    { name: 'Ortopedia', icon: '🦴', count: physiotherapists.filter(p => p.specialty === 'Ortopedia').length },
+    { name: 'Neurologia', icon: '🧠', count: physiotherapists.filter(p => p.specialty === 'Neurologia').length },
+    { name: 'Geriatria', icon: '👴', count: physiotherapists.filter(p => p.specialty === 'Geriatria').length },
+    { name: 'Esportiva', icon: '⚽', count: physiotherapists.filter(p => p.specialty === 'Esportiva').length },
+    { name: 'RPG', icon: '🧘', count: physiotherapists.filter(p => p.specialty === 'RPG').length },
+    { name: 'Pediatria', icon: '👶', count: physiotherapists.filter(p => p.specialty === 'Pediatria').length }
   ];
 
   const filteredPhysiotherapists = physiotherapists.filter(physio => {
@@ -158,6 +135,7 @@ export const MobileSearchScreen = ({ onNavigate }: MobileSearchScreenProps) => {
               {filteredPhysiotherapists.map((physio) => (
                 <div
                   key={physio.id}
+                  onClick={() => onPhysiotherapistSelect?.(physio.id)}
                   className="flex items-center p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors cursor-pointer"
                 >
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-400 to-green-400 rounded-full flex items-center justify-center text-white font-semibold mr-3">
@@ -174,9 +152,9 @@ export const MobileSearchScreen = ({ onNavigate }: MobileSearchScreenProps) => {
                         <span className="text-yellow-400 text-sm">⭐</span>
                         <span className="text-sm text-gray-600 ml-1">{physio.rating}</span>
                         <span className="text-gray-400 mx-1">•</span>
-                        <span className="text-sm text-gray-600">{physio.distance}</span>
+                        <span className="text-sm text-gray-600">{(Math.random() * 3 + 0.5).toFixed(1)} km</span>
                       </div>
-                      <span className="text-sm font-medium text-green-600">{physio.price}</span>
+                      <span className="text-sm font-medium text-green-600">R$ {physio.price}</span>
                     </div>
                   </div>
                 </div>
