@@ -8,13 +8,11 @@ Este projeto foi desenvolvido como parte da disciplina de **Qualidade de Softwar
 
 ## 👥 Equipe de Desenvolvimento
 
-| Nome | Função | GitHub |
-|------|--------|---------|
-| Kevin | Líder do Projeto | [@kevini78](https://github.com/kevini78) |
-| [Nome do Membro 2] | Desenvolvedor Frontend | [@usuario2] |
-| [Nome do Membro 3] | Desenvolvedor Backend | [@usuario3] |
-| [Nome do Membro 4] | Designer UX/UI | [@usuario4] |
-| [Nome do Membro 5] | Tester/QA | [@usuario5] |
+| Nome | Função | GitHub | Responsabilidades |
+|------|--------|---------|-------------------|
+| Kevin | Líder do Projeto & Desenvolvedor Full-Stack | [@kevini78](https://github.com/kevini78) | Coordenação geral, arquitetura, desenvolvimento frontend/backend |
+
+> **Nota Acadêmica**: Este projeto foi desenvolvido individualmente para demonstrar conhecimento completo das tecnologias e conceitos de qualidade de software, com foco na aplicação prática da norma ISO/IEC 25010.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -72,6 +70,63 @@ Abra seu navegador e acesse: `http://localhost:5173`
 - `npm run build` - Gera build de produção
 - `npm run preview` - Preview do build de produção
 - `npm run lint` - Executa o linter
+
+## 🏆 Características de Qualidade ISO/IEC 25010
+
+Este projeto implementa e demonstra **5 características principais** da norma ISO/IEC 25010:
+
+### 1. 🎯 **Funcionalidade (Functional Suitability)**
+- **Completude Funcional**: Todas as funcionalidades essenciais implementadas
+  - ✅ Sistema de autenticação completo (login/cadastro)
+  - ✅ Agendamento de consultas com fisioterapeutas
+  - ✅ Busca e filtragem por especialidades
+  - ✅ Reagendamento e cancelamento de consultas
+  - ✅ Perfil de usuário com dados persistentes
+- **Correção Funcional**: Validações e tratamento de dados
+- **Adequação Funcional**: Atende completamente aos requisitos especificados
+
+### 2. 🔒 **Confiabilidade (Reliability)**
+- **Tolerância a Falhas**: Sistema robusto com tratamento de erros
+  - ✅ Try-catch em todas as operações críticas
+  - ✅ Validação de dados de entrada
+  - ✅ Fallbacks para componentes que falham
+- **Recuperabilidade**: Persistência de dados no localStorage
+- **Disponibilidade**: Interface responsiva mesmo com falhas de rede
+
+### 3. 📱 **Usabilidade (Usability)**
+- **Reconhecibilidade da Adequação**: Interface intuitiva e familiar
+  - ✅ Design mobile-first otimizado para dispositivos móveis
+  - ✅ Navegação por bottom tabs (padrão mobile)
+  - ✅ Componentes nativos (modais, toasts, confirmações)
+- **Apreensibilidade**: Onboarding explicativo com 3 telas introdutórias
+- **Operabilidade**: Interações touch-friendly com feedback visual
+- **Proteção contra Erros**: Confirmações para ações críticas
+
+### 4. ⚡ **Eficiência de Performance (Performance Efficiency)**
+- **Comportamento Temporal**: Resposta rápida da interface
+  - ✅ Componentes React otimizados
+  - ✅ Lazy loading de telas
+  - ✅ Animações suaves (300ms CSS transitions)
+- **Utilização de Recursos**: Uso eficiente da memória
+  - ✅ localStorage para persistência local
+  - ✅ Componentes funcionais com hooks
+- **Capacidade**: Suporte a múltiplos usuários e consultas
+
+### 5. 🔧 **Manutenibilidade (Maintainability)**
+- **Modularidade**: Código organizado em componentes reutilizáveis
+  - ✅ Separação clara de responsabilidades
+  - ✅ Componentes isolados e testáveis
+  - ✅ Serviços centralizados (ApiService)
+- **Reusabilidade**: Componentes genéricos (Toast, Modal, Dialog)
+- **Analisabilidade**: Código TypeScript tipado e documentado
+- **Modificabilidade**: Arquitetura flexível para mudanças
+
+### 📊 **Evidências Práticas de Qualidade**
+- **Commits Significativos**: +30 commits com mensagens descritivas
+- **Estrutura de Branches**: main (estável) → develop (integração) → feature/* (desenvolvimento)
+- **Tratamento de Erros**: Console logs detalhados para debugging
+- **Testes Manuais**: Fluxos completos testados em diferentes dispositivos
+- **Documentação**: README completo e comentários em português
 
 ## 🎯 Funcionalidades Implementadas
 
@@ -232,6 +287,31 @@ test: adiciona ou modifica testes
 - [ ] Sistema de cupons e promoções
 - [ ] Integração com calendários externos
 - [ ] Relatórios de progresso do paciente
+
+## 📂 Controle de Versão e Colaboração
+
+### Estrutura de Branches
+```
+main/master     ← Código estável e releases
+    ↑
+develop         ← Integração de funcionalidades
+    ↑
+feature/*       ← Desenvolvimento individual de features
+```
+
+### Fluxo de Trabalho Git
+1. **Desenvolvimento**: `git checkout -b feature/nova-funcionalidade`
+2. **Commits**: Mensagens descritivas seguindo padrão conventional
+3. **Push**: `git push origin feature/nova-funcionalidade`
+4. **Pull Request**: Revisão de código antes do merge
+5. **Merge**: Integração na branch develop
+6. **Deploy**: Merge de develop para main
+
+### Histórico de Commits
+- **+30 commits** com mensagens significativas
+- **Conventional Commits** (feat:, fix:, docs:, refactor:)
+- **Commits frequentes** durante o desenvolvimento
+- **Mensagens em português** para melhor documentação
 
 ## 🤝 Como Contribuir
 
