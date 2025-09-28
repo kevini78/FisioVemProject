@@ -69,11 +69,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
           <div className="grid grid-cols-2 gap-3 mb-6">
             <button
               type="button"
-              onClick={() => {
-                setUserType('patient');
-                setEmail('maria.silva@email.com');
-                setPassword('demo123');
-              }}
+              onClick={() => setUserType('patient')}
               className={`flex flex-col items-center py-4 px-3 rounded-lg border-2 transition-colors ${
                 userType === 'patient' 
                   ? 'border-blue-500 bg-blue-50 text-blue-700' 
@@ -85,11 +81,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setUserType('physiotherapist');
-                setEmail('ana.beatriz@fisiovem.com');
-                setPassword('demo123');
-              }}
+              onClick={() => setUserType('physiotherapist')}
               className={`flex flex-col items-center py-4 px-3 rounded-lg border-2 transition-colors ${
                 userType === 'physiotherapist' 
                   ? 'border-blue-500 bg-blue-50 text-blue-700' 

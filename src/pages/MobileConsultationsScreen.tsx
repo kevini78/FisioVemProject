@@ -15,12 +15,21 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
   }, []);
 
   const loadConsultations = () => {
-    const currentUser = apiService.getCurrentUser();
-    if (currentUser) {
-      const userConsultations = apiService.getConsultations(currentUser.id);
-      setConsultations(userConsultations);
+    try {
+      const currentUser = apiService.getCurrentUser();
+      if (currentUser) {
+        const userConsultations = apiService.getConsultations(currentUser.id);
+        setConsultations(userConsultations || []);
+      } else {
+        console.warn('Nenhum usuário logado encontrado');
+        setConsultations([]);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar consultas:', error);
+      setConsultations([]);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const handleCancelConsultation = async (consultationId: string) => {

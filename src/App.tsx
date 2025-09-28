@@ -11,10 +11,11 @@ import { MobileSearchScreen } from "@/pages/MobileSearchScreen";
 import { MobileConsultationsScreen } from "@/pages/MobileConsultationsScreen";
 import { MobileProfileScreen } from "@/pages/MobileProfileScreen";
 import { BookingScreen } from "@/pages/BookingScreen";
+import { BookingSuccessScreen } from "@/pages/BookingSuccessScreen";
 import { apiService } from "@/services/api";
 import NotFound from "./pages/NotFound";
 
-type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'profile' | 'booking';
+type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'profile' | 'booking' | 'booking-success';
 
 const AppContent = () => {
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
@@ -34,7 +35,7 @@ const AppContent = () => {
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated && currentScreen !== 'home' && currentScreen !== 'booking' && currentScreen !== 'appointments' && currentScreen !== 'search' && currentScreen !== 'profile') {
+    if (isAuthenticated && currentScreen !== 'home' && currentScreen !== 'booking' && currentScreen !== 'appointments' && currentScreen !== 'search' && currentScreen !== 'profile' && currentScreen !== 'booking-success') {
       setCurrentScreen('home');
     }
   }, [isAuthenticated, currentScreen]);
@@ -117,7 +118,15 @@ const AppContent = () => {
         <BookingScreen 
           physiotherapist={physiotherapist}
           onBack={() => setCurrentScreen('home')}
-          onSuccess={() => setCurrentScreen('appointments')}
+          onSuccess={() => setCurrentScreen('booking-success')}
+        />
+      );
+    
+    case 'booking-success':
+      return (
+        <BookingSuccessScreen 
+          onGoHome={() => setCurrentScreen('home')}
+          onViewConsultations={() => setCurrentScreen('appointments')}
         />
       );
     
