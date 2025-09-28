@@ -2,43 +2,32 @@ import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { SplashScreen } from "@/pages/SplashScreen";
 import { OnboardingScreen } from "@/pages/OnboardingScreen";
 import { LoginScreen } from "@/pages/LoginScreen";
 import { RegisterScreen } from "@/pages/RegisterScreen";
 import { HomeScreen } from "@/pages/HomeScreen";
-import { PhysiotherapistProfile } from "@/pages/PhysiotherapistProfile";
-import { AppointmentBooking } from "@/pages/AppointmentBooking";
-import { SearchScreen } from "@/pages/SearchScreen";
-import { ConsultationsScreen } from "@/pages/ConsultationsScreen";
-import { EvaluationsScreen } from "@/pages/EvaluationsScreen";
-import { ProfileScreen } from "@/pages/ProfileScreen";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
-
-type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home' | 'search' | 'appointments' | 'reviews' | 'profile' | 'physio-profile' | 'appointment';
+type AppScreen = 'splash' | 'onboarding' | 'login' | 'register' | 'home';
 
 const AppContent = () => {
-  console.log("AppContent renderizado");
   const [currentScreen, setCurrentScreen] = useState<AppScreen>('splash');
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
-  const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
-  
-  console.log("Tentando usar useAuth...");
-  const { isAuthenticated } = useAuth();
-  console.log("isAuthenticated:", isAuthenticated);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Check if user has seen onboarding
     const onboardingCompleted = localStorage.getItem('fisiovem_onboarding_completed');
     setHasSeenOnboarding(!!onboardingCompleted);
+    
+    // Check if user is authenticated
+    const savedUser = localStorage.getItem('fisiovem_user');
+    setIsAuthenticated(!!savedUser);
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && currentScreen !== 'home') {
       setCurrentScreen('home');
     }
   }, [isAuthenticated]);
@@ -58,6 +47,13 @@ const AppContent = () => {
   };
 
   const handleLoginSuccess = () => {
+    // Simular autenticação
+    localStorage.setItem('fisiovem_user', JSON.stringify({
+      id: 'user_1',
+      name: 'Usuário Teste',
+      email: 'teste@email.com'
+    }));
+    setIsAuthenticated(true);
     setCurrentScreen('home');
   };
 
@@ -70,17 +66,10 @@ const AppContent = () => {
   };
 
   const handlePhysiotherapistSelect = (id: string) => {
-    setSelectedPhysiotherapistId(id);
-    setCurrentScreen('physio-profile');
+    // Funcionalidade em desenvolvimento
+    alert('Seleção de fisioterapeuta em desenvolvimento!');
   };
 
-  const handleBookAppointment = (physiotherapistId: string) => {
-    setSelectedPhysiotherapistId(physiotherapistId);
-    setCurrentScreen('appointment');
-  };
-
-  console.log("Renderizando tela:", currentScreen);
-  
   // Render current screen
   switch (currentScreen) {
     case 'splash':
@@ -103,53 +92,18 @@ const AppContent = () => {
         />
       );
     
-    case 'physio-profile':
-      return (
-        <PhysiotherapistProfile
-          physiotherapistId={selectedPhysiotherapistId}
-          onBack={() => setCurrentScreen('home')}
-          onBookAppointment={handleBookAppointment}
-        />
-      );
-    
-    case 'appointment':
-      return (
-        <AppointmentBooking
-          physiotherapistId={selectedPhysiotherapistId}
-          onBack={() => setCurrentScreen('physio-profile')}
-          onSuccess={() => setCurrentScreen('home')}
-        />
-      );
-    
-    case 'search':
-      return <SearchScreen />;
-    
-    case 'appointments':
-      return <ConsultationsScreen />;
-    
-    case 'reviews':
-      return <EvaluationsScreen />;
-    
-    case 'profile':
-      return <ProfileScreen />;
-    
     default:
       return <NotFound />;
   }
 };
 
 const App = () => {
-  console.log("App component carregado");
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
-          <Toaster />
-          <Sonner />
-          <AppContent />
-        </AuthProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <AppContent />
+    </TooltipProvider>
   );
 };
 
