@@ -62,7 +62,7 @@ npm run dev
 ```
 
 4. **Acesse a aplicação:**
-Abra seu navegador e acesse: `http://localhost:5173`
+Abra seu navegador e acesse: `http://localhost:8080`
 
 ### Scripts Disponíveis
 
