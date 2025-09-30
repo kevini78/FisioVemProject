@@ -27,7 +27,7 @@ const mockEvaluations: Evaluation[] = [
     physiotherapistName: 'Dr. Carlos Silva',
     physiotherapistImage: '/placeholder.svg',
     rating: 5,
-    comment: 'Excelente profissional! Muito atencioso e competente. O atendimento domiciliar foi perfeito, chegou no horário e trouxe todos os equipamentos necessários. Recomendo!',
+    comment: 'Excelente profissional! Muito atencioso e competente. O atendimento foi perfeito, chegou no horário e trouxe todos os equipamentos necessários. Recomendo!',
     date: '2024-09-25',
     specialty: 'Ortopedia',
     helpful: 12,
