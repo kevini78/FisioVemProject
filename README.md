@@ -332,6 +332,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 - Email: contato@fisiovem.com
 - GitHub: [@kevini78](https://github.com/kevini78)
 - GitHub: [@MRabuske](https://github.com/MRabuske)
+- GitHub: [2222220gc](https://github.com/2222220gc)
 ---
 
 **Desenvolvido com ❤️ para a disciplina de Qualidade de Software**
