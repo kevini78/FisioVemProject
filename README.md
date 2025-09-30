@@ -337,6 +337,6 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 **Desenvolvido com ❤️ para a disciplina de Qualidade de Software**
 
-*Universidade: [Nome da Universidade]*
+*Universidade: Universidade Católica de Brasília*
 *Professor: MSc. Sybelle Nogueira*
-*Semestre: 2024.2*
+*Semestre: 2025.2*
