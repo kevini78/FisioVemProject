@@ -331,7 +331,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 **Equipe FisioVem**
 - Email: contato@fisiovem.com
 - GitHub: [@kevini78](https://github.com/kevini78)
-
+- GitHub: [@MRabuske](https://github.com/MRabuske)
 ---
 
 **Desenvolvido com ❤️ para a disciplina de Qualidade de Software**
