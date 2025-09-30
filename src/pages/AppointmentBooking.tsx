@@ -184,7 +184,7 @@ export const AppointmentBooking = ({
           </CardHeader>
           <CardContent>
             <Textarea
-              placeholder="Descreva brevemente seu problema ou necessidades específicas..."
+              placeholder="Descreva brevemente seu problema ou suas necessidades específicas..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="min-h-20"
