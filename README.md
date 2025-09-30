@@ -2,7 +2,7 @@
 
 ## 📋 Descrição do Projeto
 
-O **FisioVem** é uma aplicação mobile web desenvolvida para conectar pacientes com fisioterapeutas qualificados, oferecendo serviços de fisioterapia no conforto do domicílio. A plataforma permite agendamento de consultas, avaliação de profissionais e gestão completa do atendimento fisioterapêutico.
+O **FisioVem** é uma aplicação mobile web desenvolvida para auxiliar pacientes com dificuldades motoras e/ou que não possuem os meios de transporte necessários para direcionarem-se para clínicas especializadas, dando acesso à fisioterapeutas qualificados, oferecendo serviços de fisioterapia no conforto do domicílio. A plataforma permite agendamento de consultas, avaliação de profissionais e gestão completa do atendimento fisioterapêutico.
 
 Este projeto foi desenvolvido como parte da disciplina de **Qualidade de Software**, aplicando conceitos de controle de versão com Git/GitHub e implementando características de qualidade segundo a norma ISO/IEC 25010.
 
