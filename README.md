@@ -12,7 +12,8 @@ Este projeto foi desenvolvido como parte da disciplina de **Qualidade de Softwar
 |------|--------|---------|-------------------|
 | Kevin | Líder do Projeto & Desenvolvedor Full-Stack | [@kevini78](https://github.com/kevini78) | Coordenação geral, arquitetura, desenvolvimento frontend/backend |
 | Matheus| Testador do Código & Responsável pela Manutenção|[@MRabuske](https://github.com/MRabuske)| Manutenção geral, editor e testador de funcionalidades |
-| Gustavo | Scrum Master | [2222220gc](https://github.com/2222220gc) | Facilitar cerimônias ágeis, remover impedimentos, apoiar a equipe no uso do Scrum, garantir que o processo seja seguido
+| Gustavo | Scrum Master | [2222220gc](https://github.com/2222220gc) | Facilitar cerimônias ágeis, remover impedimentos, apoiar a equipe no uso do Scrum, garantir que o processo seja seguido |
+| Leonardo| Manutenção Geral & Otimização | [leoosantoz](https://github.com/leoosantoz)| Correção de bugs, melhoria contínua do código, otimização de performance |
 > **Nota Acadêmica**: Este projeto foi desenvolvido para demonstrar conhecimento completo das tecnologias e conceitos de qualidade de software, com foco na aplicação prática da norma ISO/IEC 25010.
 
 ## 🚀 Tecnologias Utilizadas
