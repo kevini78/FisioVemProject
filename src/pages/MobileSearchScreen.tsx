@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import { apiService } from '@/services/api';
 
 interface MobileSearchScreenProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: string, params?: any) => void;
   onPhysiotherapistSelect?: (id: string) => void;
+  initialSpecialty?: string;
 }
 
-export const MobileSearchScreen = ({ onNavigate, onPhysiotherapistSelect }: MobileSearchScreenProps) => {
+export const MobileSearchScreen = ({ onNavigate, onPhysiotherapistSelect, initialSpecialty }: MobileSearchScreenProps) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(null);
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string | null>(initialSpecialty || null);
   const [physiotherapists, setPhysiotherapists] = useState<any[]>([]);
 
   useEffect(() => {

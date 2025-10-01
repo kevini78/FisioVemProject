@@ -91,7 +91,7 @@ export const SimpleHomeScreen = ({ onNavigate, onPhysiotherapistSelect }: Simple
             ].map((specialty) => (
               <button
                 key={specialty.name}
-                onClick={() => onPhysiotherapistSelect('demo')}
+                onClick={() => onNavigate('search', { specialty: specialty.name })}
                 className="flex items-center p-3 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-colors"
               >
                 <span className="text-xl mr-3">{specialty.icon}</span>

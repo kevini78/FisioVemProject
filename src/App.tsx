@@ -22,6 +22,7 @@ const AppContent = () => {
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [selectedPhysiotherapistId, setSelectedPhysiotherapistId] = useState<string>('');
+  const [searchParams, setSearchParams] = useState<any>(null);
 
   useEffect(() => {
     // Para desenvolvimento: limpar apenas onboarding para ver o fluxo completo
@@ -71,8 +72,9 @@ const AppContent = () => {
     setCurrentScreen('register');
   };
 
-  const handleNavigate = (screen: AppScreen) => {
+  const handleNavigate = (screen: AppScreen, params?: any) => {
     setCurrentScreen(screen);
+    setSearchParams(params);
   };
 
   const handlePhysiotherapistSelect = (id: string) => {
@@ -103,7 +105,11 @@ const AppContent = () => {
       );
     
     case 'search':
-      return <MobileSearchScreen onNavigate={handleNavigate} onPhysiotherapistSelect={handlePhysiotherapistSelect} />;
+      return <MobileSearchScreen 
+        onNavigate={handleNavigate} 
+        onPhysiotherapistSelect={handlePhysiotherapistSelect}
+        initialSpecialty={searchParams?.specialty}
+      />;
     
     case 'appointments':
       return <SimpleConsultationsScreen onNavigate={handleNavigate} />;
