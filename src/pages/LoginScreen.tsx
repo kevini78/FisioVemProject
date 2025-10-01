@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Eye, EyeOff, Activity } from 'lucide-react';
 import { apiService } from '@/services/api';
+import { Toast } from '@/components/Toast';
 
 interface LoginScreenProps {
   onSuccess: () => void;
@@ -13,6 +14,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [userType] = useState<'patient' | 'physiotherapist'>('patient'); // Sempre paciente
   const [isLoading, setIsLoading] = useState(false);
+  const [toast, setToast] = useState<{message: string; type: 'success' | 'error' | 'info'} | null>(null);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,11 +31,17 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
         onSuccess();
       } else {
         console.log('Erro no login:', result.error);
-        alert(result.error || 'E-mail ou senha incorretos.');
+        setToast({
+          message: 'Usuário ou senha inválidos',
+          type: 'error'
+        });
       }
     } catch (error) {
       console.error('Erro inesperado no login:', error);
-      alert('Erro inesperado ao fazer login');
+      setToast({
+        message: 'Erro inesperado ao fazer login',
+        type: 'error'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -41,8 +49,16 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
 
 
   return (
-    <div className="mobile-container">
-      <div className="mobile-safe-area min-h-screen bg-gradient-hero flex flex-col">
+    <>
+      {toast && (
+        <Toast 
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
+      <div className="mobile-container">
+        <div className="mobile-safe-area min-h-screen bg-gradient-hero flex flex-col">
         {/* Status Bar Spacer */}
         <div className="h-2 bg-gradient-hero"></div>
         
@@ -128,6 +144,7 @@ export const LoginScreen = ({ onSuccess, onRegister }: LoginScreenProps) => {
         </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };

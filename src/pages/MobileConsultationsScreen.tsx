@@ -36,7 +36,43 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
     }
   };
 
+  const canCancelOrReschedule = (consultation: any) => {
+    // Se a consulta já tem um objeto Date, usar diretamente
+    let consultationDateTime;
+    if (consultation.date && typeof consultation.date === 'object' && consultation.date instanceof Date) {
+      consultationDateTime = consultation.date;
+    } else {
+      // Se for string, converter
+      consultationDateTime = new Date(`${consultation.date}T${consultation.time}`);
+    }
+    
+    const now = new Date();
+    const hoursUntilConsultation = (consultationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+    
+    // Pode cancelar/reagendar apenas com 48h de antecedência (2 dias)
+    return hoursUntilConsultation >= 48;
+  };
+
   const handleCancelConsultation = async (consultationId: string) => {
+    // Verificar se pode cancelar (48h de antecedência)
+    const consultation = consultations.find(c => c.id === consultationId);
+    if (consultation) {
+      let consultationDateTime;
+      if (consultation.date && typeof consultation.date === 'object' && (consultation.date as any) instanceof Date) {
+        consultationDateTime = consultation.date;
+      } else {
+        consultationDateTime = new Date(`${consultation.date}T${consultation.time}`);
+      }
+      
+      const now = new Date();
+      const hoursUntilConsultation = (consultationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+      
+      if (hoursUntilConsultation < 48) {
+        alert('Não é possível cancelar consultas com menos de 48 horas de antecedência.');
+        return;
+      }
+    }
+
     if (!confirm('Tem certeza que deseja cancelar esta consulta?')) {
       return;
     }
@@ -62,16 +98,25 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
 
   const getFilteredConsultations = () => {
     const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dayAfterTomorrow = new Date(today);
+    dayAfterTomorrow.setDate(today.getDate() + 2); // 2 dias no futuro (02/10)
     
     if (activeTab === 'proximas') {
-      return consultations.filter(c => 
-        c.status === 'agendada' || c.status === 'confirmada' || 
-        (new Date(c.date) >= now && c.status !== 'cancelada' && c.status !== 'concluida')
-      );
+      const filtered = consultations.filter(c => {
+        const consultationDate = new Date(c.date);
+        const consultationDateTime = new Date(consultationDate.getFullYear(), consultationDate.getMonth(), consultationDate.getDate());
+        
+        // Só mostrar consultas a partir de 02/10 (2 dias no futuro)
+        return (consultationDateTime >= dayAfterTomorrow) && 
+               (c.status === 'agendada' || c.status === 'confirmada');
+      });
+      
+      return filtered;
     } else {
       return consultations.filter(c => 
         c.status === 'concluida' || c.status === 'cancelada' ||
-        (new Date(c.date) < now && c.status !== 'agendada' && c.status !== 'confirmada')
+        (new Date(c.date) < today && c.status !== 'agendada' && c.status !== 'confirmada')
       );
     }
   };
@@ -176,12 +221,14 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
             >
               ✅ Confirmar
             </button>
-            <button 
-              onClick={() => handleCancelConsultation(consultation.id)}
-              className="mobile-btn flex-1 bg-red-600 text-white"
-            >
-              ❌ Cancelar
-            </button>
+            {canCancelOrReschedule(consultation) && (
+              <button 
+                onClick={() => handleCancelConsultation(consultation.id)}
+                className="mobile-btn flex-1 bg-red-600 text-white"
+              >
+                ❌ Cancelar
+              </button>
+            )}
           </>
         )}
         
@@ -190,9 +237,18 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
             <button className="mobile-btn flex-1 bg-gray-100 text-gray-700">
               📋 Ver Detalhes
             </button>
-            <button className="mobile-btn flex-1 bg-blue-100 text-blue-700">
-              🔄 Reagendar
-            </button>
+            {canCancelOrReschedule(consultation) ? (
+              <button className="mobile-btn flex-1 bg-blue-100 text-blue-700">
+                🔄 Reagendar
+              </button>
+            ) : (
+              <button 
+                className="mobile-btn flex-1 bg-gray-100 text-gray-500"
+                onClick={() => alert('Não é possível reagendar consultas com menos de 24 horas de antecedência.')}
+              >
+                🔄 Reagendar
+              </button>
+            )}
           </>
         )}
       </div>
@@ -268,7 +324,7 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
-              Próximas ({consultations.proximas.length})
+              Próximas ({getFilteredConsultations().length})
             </button>
             <button
               onClick={() => setActiveTab('concluidas')}
@@ -278,7 +334,7 @@ export const MobileConsultationsScreen = ({ onNavigate }: MobileConsultationsScr
                   : 'text-gray-600 hover:text-gray-800'
               }`}
             >
-              Concluídas ({consultations.concluidas.length})
+              Concluídas ({consultations.filter(c => c.status === 'concluida' || c.status === 'cancelada').length})
             </button>
           </div>
         </div>

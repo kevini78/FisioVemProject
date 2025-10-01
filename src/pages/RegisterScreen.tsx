@@ -8,6 +8,19 @@ import { apiService } from '@/services/api';
 import { Toast } from '@/components/Toast';
 import type { UserType } from '@/services/api';
 
+// Função para validar email
+function validarEmail(email: string): boolean {
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return regex.test(email);
+}
+
+// Função para validar senha
+function validarSenha(senha: string): boolean {
+  // Pelo menos 8 caracteres, 1 maiúscula, 1 minúscula, 1 número e 1 especial
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  return regex.test(senha);
+}
+
 interface RegisterScreenProps {
   onSuccess: () => void;
   onBack: () => void;
@@ -33,13 +46,39 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (formData.password !== formData.confirmPassword) {
-      alert('As senhas não coincidem.');
+    // Validação do nome completo (máximo 255 caracteres)
+    if (formData.name.length > 255) {
+      setToast({
+        message: 'O nome completo não pode ter mais de 255 caracteres.',
+        type: 'error'
+      });
       return;
     }
 
-    if (formData.password.length < 6) {
-      alert('A senha deve ter pelo menos 6 caracteres.');
+    // Validação do email
+    if (!validarEmail(formData.email)) {
+      setToast({
+        message: 'Por favor, insira um email válido.',
+        type: 'error'
+      });
+      return;
+    }
+
+    // Validação da senha
+    if (!validarSenha(formData.password)) {
+      setToast({
+        message: 'A senha deve ter pelo menos 8 caracteres, incluindo 1 maiúscula, 1 minúscula, 1 número e 1 caractere especial (@$!%*?&).',
+        type: 'error'
+      });
+      return;
+    }
+
+    // Validação de senhas coincidentes
+    if (formData.password !== formData.confirmPassword) {
+      setToast({
+        message: 'As senhas não coincidem.',
+        type: 'error'
+      });
       return;
     }
 
@@ -142,6 +181,7 @@ export const RegisterScreen = ({ onSuccess, onBack }: RegisterScreenProps) => {
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 required
+                maxLength={255}
                 className="h-11"
               />
             </div>

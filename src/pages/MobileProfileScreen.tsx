@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import { apiService } from '@/services/api';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
 
 interface MobileProfileScreenProps {
   onNavigate: (page: string) => void;
@@ -8,15 +13,67 @@ interface MobileProfileScreenProps {
 export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) => {
   const [user, setUser] = useState<any>(null);
   const [totalConsultations, setTotalConsultations] = useState(0);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
+  });
+  const [notifications, setNotifications] = useState({
+    appointments: true,
+    promotions: false,
+    reminders: true
+  });
+
+  const updateConsultationCount = () => {
+    const currentUser = apiService.getCurrentUser();
+    if (currentUser) {
+      const consultations = apiService.getConsultations(currentUser.id);
+      setTotalConsultations(consultations.length);
+    }
+  };
 
   useEffect(() => {
     const currentUser = apiService.getCurrentUser();
     if (currentUser) {
       setUser(currentUser);
-      const consultations = apiService.getConsultations(currentUser.id);
-      setTotalConsultations(consultations.length);
+      setEditForm({
+        name: currentUser.name || '',
+        email: currentUser.email || '',
+        phone: currentUser.phone || '',
+        address: currentUser.address || ''
+      });
+      updateConsultationCount();
     }
   }, []);
+
+  // Atualizar contador quando a página ganhar foco (voltar de outras telas)
+  useEffect(() => {
+    const handleFocus = () => {
+      updateConsultationCount();
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
+  // Atualizar contador sempre que o componente é renderizado
+  useEffect(() => {
+    updateConsultationCount();
+  });
+
+  const handleSaveProfile = () => {
+    if (user) {
+      const updatedUser = { ...user, ...editForm };
+      setUser(updatedUser);
+      // Aqui você salvaria no backend
+      localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+      setIsEditingProfile(false);
+      alert('Perfil atualizado com sucesso!');
+    }
+  };
 
   if (!user) {
     return (
@@ -75,11 +132,8 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
         
         {/* Header */}
         <div className="bg-white px-4 py-4 border-b border-gray-200">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <h1 className="text-2xl font-bold text-gray-800">👤 Perfil</h1>
-            <button className="mobile-touch-target bg-gray-100 rounded-full p-2">
-              <span className="text-lg">⚙️</span>
-            </button>
           </div>
         </div>
 
@@ -106,14 +160,10 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div className="bg-white/20 rounded-lg p-3 text-center">
               <div className="text-2xl font-bold text-white">{totalConsultations}</div>
               <div className="text-sm text-white/80">Consultas</div>
-            </div>
-            <div className="bg-white/20 rounded-lg p-3 text-center">
-              <div className="text-2xl font-bold text-white">{user.userType === 'patient' ? 2 : 5}</div>
-              <div className="text-sm text-white/80">Especialidades</div>
             </div>
           </div>
         </div>
@@ -164,12 +214,13 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
                 icon="👤"
                 title="Editar Perfil"
                 subtitle="Altere suas informações pessoais"
-                onClick={() => alert('Editar perfil em desenvolvimento')}
+                onClick={() => setIsEditingProfile(true)}
               />
               <MenuOption
                 icon="🔔"
                 title="Notificações"
                 subtitle="Gerencie suas preferências"
+                onClick={() => setIsNotificationsOpen(true)}
                 rightElement={
                   <div className="w-12 h-6 bg-blue-600 rounded-full relative">
                     <div className="w-5 h-5 bg-white rounded-full absolute top-0.5 right-0.5"></div>
@@ -219,6 +270,128 @@ export const MobileProfileScreen = ({ onNavigate }: MobileProfileScreenProps) =>
           </div>
         </div>
       </div>
+
+      {/* Modal de Edição de Perfil */}
+      <Dialog open={isEditingProfile} onOpenChange={setIsEditingProfile}>
+        <DialogContent className="max-w-md mx-auto">
+          <DialogHeader>
+            <DialogTitle>Editar Perfil</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="edit-name">Nome Completo</Label>
+              <Input
+                id="edit-name"
+                value={editForm.name}
+                onChange={(e) => setEditForm(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Seu nome completo"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-email">E-mail</Label>
+              <Input
+                id="edit-email"
+                type="email"
+                value={editForm.email}
+                onChange={(e) => setEditForm(prev => ({ ...prev, email: e.target.value }))}
+                placeholder="seu@email.com"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-phone">Telefone</Label>
+              <Input
+                id="edit-phone"
+                value={editForm.phone}
+                onChange={(e) => setEditForm(prev => ({ ...prev, phone: e.target.value }))}
+                placeholder="(11) 99999-9999"
+              />
+            </div>
+            <div>
+              <Label htmlFor="edit-address">Endereço</Label>
+              <Input
+                id="edit-address"
+                value={editForm.address}
+                onChange={(e) => setEditForm(prev => ({ ...prev, address: e.target.value }))}
+                placeholder="Rua, número, bairro, cidade"
+              />
+            </div>
+            <div className="flex space-x-2 pt-4">
+              <Button 
+                variant="outline" 
+                className="flex-1"
+                onClick={() => setIsEditingProfile(false)}
+              >
+                Cancelar
+              </Button>
+              <Button 
+                className="flex-1"
+                onClick={handleSaveProfile}
+              >
+                Salvar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Modal de Notificações */}
+      <Dialog open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
+        <DialogContent className="max-w-md mx-auto">
+          <DialogHeader>
+            <DialogTitle>Configurações de Notificação</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="appointments">Consultas</Label>
+                <p className="text-sm text-gray-500">Lembretes de consultas agendadas</p>
+              </div>
+              <Switch
+                id="appointments"
+                checked={notifications.appointments}
+                onCheckedChange={(checked) => 
+                  setNotifications(prev => ({ ...prev, appointments: checked }))
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="promotions">Promoções</Label>
+                <p className="text-sm text-gray-500">Ofertas e promoções especiais</p>
+              </div>
+              <Switch
+                id="promotions"
+                checked={notifications.promotions}
+                onCheckedChange={(checked) => 
+                  setNotifications(prev => ({ ...prev, promotions: checked }))
+                }
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <Label htmlFor="reminders">Lembretes</Label>
+                <p className="text-sm text-gray-500">Lembretes gerais do app</p>
+              </div>
+              <Switch
+                id="reminders"
+                checked={notifications.reminders}
+                onCheckedChange={(checked) => 
+                  setNotifications(prev => ({ ...prev, reminders: checked }))
+                }
+              />
+            </div>
+            <div className="flex space-x-2 pt-4">
+              <Button 
+                variant="outline" 
+                className="flex-1"
+                onClick={() => setIsNotificationsOpen(false)}
+              >
+                Fechar
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

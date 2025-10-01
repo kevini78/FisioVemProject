@@ -92,6 +92,7 @@ class ApiService {
 
       localStorage.setItem(this.getStorageKey('current_user'), JSON.stringify(user));
       console.log('Usuário salvo como atual:', user);
+      
       return { success: true, user };
     } catch (error) {
       console.error('Erro no login:', error);
@@ -448,6 +449,55 @@ class ApiService {
       
       users.push(demoPhysio);
       localStorage.setItem(this.getStorageKey('users'), JSON.stringify(users));
+    }
+  }
+
+  // Criar consultas demo para qualquer usuário
+  createDemoConsultationsForUser(userId: string): void {
+    const existingConsultations = this.getConsultations();
+    const userConsultations = existingConsultations.filter(c => c.patientId === userId);
+    
+    // Só criar se o usuário não tiver consultas
+    if (userConsultations.length === 0) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dayAfterTomorrow = new Date();
+      dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+      
+      const demoConsultations: Consultation[] = [
+        {
+          id: `demo_consultation_1_${userId}`,
+          patientId: userId,
+          physiotherapistId: 'demo_physio',
+          physiotherapistName: 'Ana Beatriz Costa',
+          date: dayAfterTomorrow.toISOString().split('T')[0], // 2 dias no futuro
+          time: '14:00',
+          type: 'presencial',
+          specialty: 'Ortopedia',
+          status: 'agendada',
+          address: 'Rua das Flores, 123 - Vila Madalena, São Paulo',
+          price: 120.00,
+          notes: 'Consulta de teste para 2 dias no futuro',
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: `demo_consultation_2_${userId}`,
+          patientId: userId,
+          physiotherapistId: 'demo_physio',
+          physiotherapistName: 'Ana Beatriz Costa',
+          date: tomorrow.toISOString().split('T')[0], // Amanhã
+          time: '16:00',
+          type: 'online',
+          specialty: 'Neurologia',
+          status: 'agendada',
+          price: 100.00,
+          notes: 'Consulta de teste para amanhã (não deve permitir cancelar)',
+          createdAt: new Date().toISOString()
+        }
+      ];
+      
+      const allConsultations = [...existingConsultations, ...demoConsultations];
+      localStorage.setItem(this.getStorageKey('consultations'), JSON.stringify(allConsultations));
     }
   }
 }

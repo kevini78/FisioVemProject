@@ -60,6 +60,21 @@ const mockConsultations: Consultation[] = [
 export const ConsultationsScreen = () => {
   const [activeTab, setActiveTab] = useState('todas');
 
+  const canCancelOrReschedule = (consultation: Consultation) => {
+    // Se a consulta já tem um objeto Date, usar diretamente
+    let consultationDateTime;
+    if (consultation.date instanceof Date) {
+      consultationDateTime = consultation.date;
+    } else {
+      // Se for string, converter
+      consultationDateTime = new Date(`${consultation.date}T${consultation.time}`);
+    }
+    
+    const now = new Date();
+    const hoursUntilConsultation = (consultationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+    return hoursUntilConsultation >= 24;
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'agendada':
@@ -150,12 +165,16 @@ export const ConsultationsScreen = () => {
       <div className="flex space-x-2 pt-2">
         {consultation.status === 'agendada' && (
           <>
-            <Button variant="outline" size="sm" className="flex-1">
-              Reagendar
-            </Button>
-            <Button variant="outline" size="sm" className="flex-1">
-              Cancelar
-            </Button>
+            {canCancelOrReschedule(consultation) && (
+              <Button variant="outline" size="sm" className="flex-1">
+                Reagendar
+              </Button>
+            )}
+            {canCancelOrReschedule(consultation) && (
+              <Button variant="outline" size="sm" className="flex-1">
+                Cancelar
+              </Button>
+            )}
             {consultation.type === 'online' && (
               <Button size="sm" className="flex-1">
                 <Video className="w-4 h-4 mr-1" />

@@ -49,7 +49,24 @@ export const SimpleConsultationsScreen = ({ onNavigate }: SimpleConsultationsScr
       const userConsultations = apiService.getConsultations(currentUser.id);
       console.log('Consultas encontradas:', userConsultations);
       
-      setConsultations(userConsultations || []);
+      // Filtrar apenas consultas a partir de 02/10 (2 dias no futuro)
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const dayAfterTomorrow = new Date(today);
+      dayAfterTomorrow.setDate(today.getDate() + 2); // 2 dias no futuro (02/10)
+      
+      const futureConsultations = userConsultations.filter(c => {
+        const consultationDate = new Date(c.date);
+        const consultationDateTime = new Date(consultationDate.getFullYear(), consultationDate.getMonth(), consultationDate.getDate());
+        
+        // Só mostrar consultas a partir de 02/10 (2 dias no futuro) ou consultas já concluídas/canceladas
+        return (consultationDateTime >= dayAfterTomorrow) || 
+               c.status === 'concluida' || 
+               c.status === 'cancelada';
+      });
+      
+      console.log('Consultas futuras filtradas:', futureConsultations);
+      setConsultations(futureConsultations || []);
     } catch (error) {
       console.error('Erro ao carregar consultas:', error);
       setError('Erro ao carregar consultas');
@@ -59,9 +76,48 @@ export const SimpleConsultationsScreen = ({ onNavigate }: SimpleConsultationsScr
     }
   };
 
+  const canCancelOrReschedule = (consultation: any) => {
+    // Se a consulta já tem um objeto Date, usar diretamente
+    let consultationDateTime;
+    if (consultation.date instanceof Date) {
+      consultationDateTime = consultation.date;
+    } else {
+      // Se for string, converter
+      consultationDateTime = new Date(`${consultation.date}T${consultation.time}`);
+    }
+    
+    const now = new Date();
+    const hoursUntilConsultation = (consultationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+    return hoursUntilConsultation >= 48;
+  };
+
   const handleCancelConsultation = (consultationId: string) => {
     console.log('=== INICIANDO CANCELAMENTO ===');
     console.log('ID da consulta a cancelar:', consultationId);
+    
+    // Verificar se pode cancelar (24h de antecedência)
+    const consultation = consultations.find(c => c.id === consultationId);
+    if (consultation) {
+      let consultationDateTime;
+      if (consultation.date instanceof Date) {
+        consultationDateTime = consultation.date;
+      } else {
+        consultationDateTime = new Date(`${consultation.date}T${consultation.time}`);
+      }
+      
+      const now = new Date();
+      const hoursUntilConsultation = (consultationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+      
+      if (hoursUntilConsultation < 48) {
+        setToast({
+          message: 'Não é possível cancelar consultas com menos de 48 horas de antecedência.',
+          type: 'error',
+          isVisible: true
+        });
+        return;
+      }
+    }
+    
     setConfirmDialog({
       isOpen: true,
       consultationId
@@ -109,6 +165,26 @@ export const SimpleConsultationsScreen = ({ onNavigate }: SimpleConsultationsScr
   const handleRescheduleConsultation = (consultationId: string) => {
     const consultation = consultations.find(c => c.id === consultationId);
     if (!consultation) return;
+
+    // Verificar se pode reagendar (24h de antecedência)
+    let consultationDateTime;
+    if (consultation.date instanceof Date) {
+      consultationDateTime = consultation.date;
+    } else {
+      consultationDateTime = new Date(`${consultation.date}T${consultation.time}`);
+    }
+    
+    const now = new Date();
+    const hoursUntilConsultation = (consultationDateTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+    
+    if (hoursUntilConsultation < 48) {
+      setToast({
+        message: 'Não é possível reagendar consultas com menos de 48 horas de antecedência.',
+        type: 'error',
+        isVisible: true
+      });
+      return;
+    }
 
     setRescheduleModal({
       isOpen: true,

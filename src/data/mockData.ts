@@ -129,6 +129,30 @@ export const mockAppointments: Appointment[] = [
     address: 'Av. Paulista, 456, São Paulo - SP',
     notes: 'Sessão de fortalecimento muscular',
     createdAt: new Date('2024-09-25'),
+  },
+  {
+    id: 'app_003',
+    patientId: 'pat_001',
+    physiotherapistId: 'physio_001',
+    date: new Date(new Date().getTime() + 2 * 24 * 60 * 60 * 1000), // 2 dias no futuro
+    duration: 60,
+    status: 'scheduled',
+    price: 120.00,
+    address: 'Rua das Flores, 123, São Paulo - SP',
+    notes: 'Consulta de teste para 2 dias no futuro',
+    createdAt: new Date(),
+  },
+  {
+    id: 'app_004',
+    patientId: 'pat_001',
+    physiotherapistId: 'physio_001',
+    date: new Date(new Date().getTime() + 2 * 60 * 60 * 1000), // 2 horas no futuro
+    duration: 60,
+    status: 'scheduled',
+    price: 120.00,
+    address: 'Rua das Flores, 123, São Paulo - SP',
+    notes: 'Consulta de teste para 2 horas no futuro (não deve permitir cancelar)',
+    createdAt: new Date(),
   }
 ];
 

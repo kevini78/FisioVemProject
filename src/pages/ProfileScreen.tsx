@@ -180,14 +180,10 @@ export const ProfileScreen = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <Card className="p-3 text-center bg-background/50">
               <div className="text-2xl font-bold text-primary">{user.totalConsultations}</div>
               <div className="text-sm text-muted-foreground">Consultas</div>
-            </Card>
-            <Card className="p-3 text-center bg-background/50">
-              <div className="text-2xl font-bold text-primary">{user.preferredSpecialties.length}</div>
-              <div className="text-sm text-muted-foreground">Especialidades</div>
             </Card>
           </div>
         </div>
@@ -250,7 +246,7 @@ export const ProfileScreen = () => {
           />
         </Card>
 
-        <Card className="mx-4 mb-4">
+        <Card className="mx-4 mb-20">
           <MenuOption
             icon={HelpCircle}
             title="Ajuda e Suporte"
@@ -262,23 +258,6 @@ export const ProfileScreen = () => {
             title="Sair"
             subtitle="Fazer logout da conta"
           />
-        </Card>
-
-        {/* Preferred Specialties */}
-        <Card className="mx-4 mb-20">
-          <div className="p-4">
-            <h3 className="font-semibold text-foreground mb-3">Especialidades de Interesse</h3>
-            <div className="flex flex-wrap gap-2">
-              {user.preferredSpecialties.map((specialty) => (
-                <Badge key={specialty} variant="secondary">
-                  {specialty}
-                </Badge>
-              ))}
-              <Button variant="outline" size="sm" className="h-6 text-xs">
-                + Adicionar
-              </Button>
-            </div>
-          </div>
         </Card>
       </div>
       </div>
